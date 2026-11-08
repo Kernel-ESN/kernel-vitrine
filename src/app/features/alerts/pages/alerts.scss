@@ -1,0 +1,97 @@
+.page {
+  display: grid;
+  gap: var(--space-6);
+  padding-block: var(--space-8) var(--space-16);
+}
+
+.page > * {
+  max-width: 56rem;
+}
+
+.head {
+  display: grid;
+  gap: var(--space-2);
+}
+
+h1 {
+  font-size: var(--text-h2);
+}
+
+.note {
+  color: var(--color-slate);
+}
+
+.success {
+  padding: var(--space-3) var(--space-4);
+  border-left: 1px solid var(--color-deep);
+  background: var(--color-mist);
+}
+
+.alerts {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.form {
+  display: grid;
+  gap: var(--space-6);
+  max-width: 36rem;
+}
+
+.criteria {
+  padding: var(--space-4);
+  border-left: 1px solid var(--color-deep);
+  background: var(--color-mist);
+}
+
+.criteria dt {
+  color: var(--color-slate);
+  font-size: var(--text-small);
+}
+
+.criteria dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+fieldset {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+legend {
+  margin-bottom: var(--space-2);
+  padding: 0;
+  font-size: var(--text-small);
+  font-weight: 600;
+}
+
+.choice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 2.75rem;
+}
+
+.choice input {
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: var(--color-deep);
+}
+
+.choice--off {
+  color: var(--color-slate);
+}
+
+.form .btn {
+  justify-self: start;
+}
+
+.privacy {
+  color: var(--color-slate);
+  font-size: var(--text-small);
+}

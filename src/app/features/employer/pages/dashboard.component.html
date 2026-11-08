@@ -1,0 +1,104 @@
+@if (user(); as current) {
+  <app-workspace
+    [eyebrow]="text.dashboardEyebrow"
+    [heading]="current.organization?.name ?? current.name"
+    [subtitle]="current.email"
+    [mark]="current.organization?.name ?? current.name"
+    headingTestId="employer-org"
+    [sections]="sections"
+    [tocLabel]="text.dashboardEyebrow"
+  >
+    <ng-container workspaceActions>
+      <a class="btn btn--primary" routerLink="/employeur/publier" data-testid="publish-link">
+        <app-icon [data]="icons.publish" [size]="20" />
+        {{ text.publish }}
+      </a>
+      <a class="action-link" routerLink="/compte">
+        <app-icon [data]="icons.account" [size]="20" />
+        {{ text.account }}
+      </a>
+    </ng-container>
+
+    <dl class="stats" workspaceAside>
+      @for (stat of stats(); track stat.label) {
+        <div>
+          <dt>{{ stat.label }}</dt>
+          <dd>{{ stat.value }}</dd>
+        </div>
+      }
+    </dl>
+
+    <app-panel id="annonces" data-spy index="01" [heading]="text.listingsTitle">
+      @for (item of items(); track item.id) {
+        <article class="listing" data-testid="employer-item">
+          <div class="listing__head">
+            <h3 class="listing__title">{{ item.title }}</h3>
+            <span class="badge" data-testid="employer-status">{{ statuses[item.status] }}</span>
+          </div>
+          <p class="listing__meta">
+            <span>{{ types[item.type] }}</span>
+            <span>{{ text.stats(item.views, item.applications) }}</span>
+          </p>
+          @if (item.moderationNote; as note) {
+            <p class="listing__note" data-testid="moderation-note">
+              <strong>{{
+                item.status === 'BROUILLON' ? text.moderationDraft : text.moderationWithdrawn
+              }}</strong>
+              {{ note }}
+            </p>
+          }
+          <div class="listing__actions">
+            @if (item.status === 'BROUILLON') {
+              <a class="action-link action-link--small" routerLink="/employeur/publier" [queryParams]="{ id: item.id }">
+                <app-icon [data]="icons.edit" [size]="18" />
+                {{ text.edit }}
+              </a>
+            }
+            @if (canClose(item)) {
+              <button
+                class="action-link action-link--small"
+                type="button"
+                data-testid="employer-close"
+                (click)="close(item.id)"
+              >
+                <app-icon [data]="icons.close" [size]="18" />
+                {{ text.close }}
+              </button>
+            }
+            @if (canRepublish(item)) {
+              <button
+                class="action-link action-link--small"
+                type="button"
+                data-testid="employer-republish"
+                (click)="republish(item.id)"
+              >
+                <app-icon [data]="icons.republish" [size]="18" />
+                {{ text.republish }}
+              </button>
+            }
+            <button
+              class="action-link action-link--small"
+              type="button"
+              data-testid="employer-duplicate"
+              (click)="duplicate(item.id)"
+            >
+              <app-icon [data]="icons.duplicate" [size]="18" />
+              {{ text.duplicate }}
+            </button>
+          </div>
+        </article>
+      } @empty {
+        <div data-testid="employer-empty">
+          <app-empty-state [icon]="icons.publish" [message]="text.emptyTitle">
+            <p class="empty-help">{{ text.emptyHelp }}</p>
+            <a class="text-link" routerLink="/employeur/publier">{{ text.publish }}</a>
+          </app-empty-state>
+        </div>
+      }
+    </app-panel>
+
+    <app-panel id="organisation" data-spy index="02" [heading]="text.organizationTitle">
+      <app-organization-status />
+    </app-panel>
+  </app-workspace>
+}

@@ -1,0 +1,72 @@
+@switch (detail().status) {
+  @case ('missing') {
+    <div class="container page">
+      <div class="state" data-testid="organization-missing">
+        <h1 class="state__title">{{ text.missingTitle }}</h1>
+        <a class="btn btn--primary btn--small" routerLink="/organisations">{{ text.back }}</a>
+      </div>
+    </div>
+  }
+  @case ('error') {
+    <div class="container page">
+      <div class="state" role="alert" data-testid="organization-error">
+        <h1 class="state__title">{{ text.errorTitle }}</h1>
+        <a class="btn btn--primary btn--small" routerLink="/organisations">{{ text.back }}</a>
+      </div>
+    </div>
+  }
+  @default {
+    @if (organization(); as item) {
+      <header class="band">
+        <div class="container band__inner">
+          <nav [attr.aria-label]="crumbs.breadcrumb">
+            <ol class="crumbs">
+              <li>
+                <a routerLink="/annonces">{{ crumbs.home }}</a>
+              </li>
+              <li>
+                <a routerLink="/organisations">{{ text.title }}</a>
+              </li>
+              <li aria-current="page">{{ item.name }}</li>
+            </ol>
+          </nav>
+          <div class="profile">
+            <app-org-mark
+              size="large"
+              [name]="item.name"
+              [style.view-transition-name]="morph() === item.id ? 'organization-mark' : null"
+            />
+            <div class="profile__text">
+              <h1
+                data-testid="organization-name"
+                [style.view-transition-name]="morph() === item.id ? 'organization-name' : null"
+              >
+                {{ item.name }}
+              </h1>
+              <p class="profile__meta">
+                <span>{{ typeLabel() }}</span>
+                @if (item.verified) {
+                  <span class="badge badge--verified" data-testid="organization-verified">
+                    <app-icon [data]="verified" [size]="18" />
+                    {{ text.verified }}
+                  </span>
+                }
+              </p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="container page" aria-labelledby="organization-listings">
+        <h2 id="organization-listings" class="section-title">
+          {{ text.open(item.openListings) }}
+        </h2>
+        @for (listing of listings(); track listing.id) {
+          <app-listing-card [listing]="listing" />
+        } @empty {
+          <p class="empty" data-testid="organization-empty">{{ text.emptyListings }}</p>
+        }
+      </section>
+    }
+  }
+}

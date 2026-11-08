@@ -1,0 +1,134 @@
+.hero {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: var(--color-night);
+  color: var(--color-white);
+}
+
+.hero__inner {
+  position: relative;
+  z-index: 1;
+  padding-block: var(--space-16);
+}
+
+.hero__text {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-6);
+}
+
+.crumbs {
+  margin-top: calc(var(--space-8) - var(--space-16));
+  color: var(--color-frost);
+  font-size: var(--text-small);
+}
+
+.crumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.crumbs li {
+  display: inline-flex;
+  gap: var(--space-2);
+}
+
+.crumbs li + li::before {
+  content: '/';
+  opacity: 0.6;
+}
+
+.crumbs a {
+  color: var(--color-frost);
+  text-decoration: none;
+  transition: color var(--transition-hover);
+}
+
+@media (hover: hover) {
+  .crumbs a:hover {
+    color: var(--color-white);
+  }
+}
+
+.hero__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--color-kernel);
+}
+
+.hero__eyebrow .eyebrow {
+  color: var(--color-kernel);
+}
+
+// Avec une icône, le filet du surtitre ferait doublon.
+.hero__eyebrow app-icon + .eyebrow::before {
+  display: none;
+}
+
+h1 {
+  max-width: 20ch;
+  letter-spacing: -0.035em;
+}
+
+.hero__lead {
+  max-width: 44rem;
+  color: var(--color-frost);
+}
+
+.hero__media {
+  position: relative;
+  margin: 0;
+}
+
+.hero__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  // Étalonnage commun : des photos de sources différentes forment une même série.
+  filter: saturate(0.8) contrast(1.06);
+}
+
+// Voile bleu nuit uni : il accorde toutes les photos à la page.
+.hero__media::after {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--color-night) 22%, transparent);
+  content: '';
+}
+
+@media (min-width: 62rem) {
+  .hero--photo .hero__text {
+    max-width: 52%;
+  }
+
+  .hero:not(.hero--photo) .hero__text {
+    max-width: 62%;
+  }
+
+  .hero__inner {
+    padding-block: var(--space-16) var(--space-24);
+  }
+
+  .hero__media {
+    position: absolute;
+    inset: 0 0 0 55%;
+  }
+
+  .hero__media img {
+    height: 100%;
+    aspect-ratio: auto;
+  }
+}
+
+@media (pointer: coarse) {
+  .crumbs a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target-min);
+  }
+}

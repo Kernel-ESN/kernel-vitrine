@@ -1,0 +1,81 @@
+<form class="form" novalidate appFocusInvalid [formGroup]="form" (ngSubmit)="onSubmit()">
+  <app-field controlId="subject" label="Objet">
+    <select appControl formControlName="subject" required>
+      <option value="question">Une question ou un premier échange</option>
+      <option value="devis">Une demande de devis</option>
+    </select>
+  </app-field>
+
+  <app-field controlId="service" label="Service concerné" note="facultatif">
+    <select appControl formControlName="service">
+      <option value="">Je ne sais pas encore</option>
+      @for (item of services; track item.key) {
+        <option [value]="item.slug">{{ item.label }}</option>
+      }
+    </select>
+  </app-field>
+
+  <app-field class="form__half" controlId="name" label="Nom" error="Indiquez votre nom.">
+    <input appControl type="text" formControlName="name" autocomplete="name" required />
+  </app-field>
+
+  <app-field class="form__half" controlId="organization" label="Organisation" note="facultatif">
+    <input appControl type="text" formControlName="organization" autocomplete="organization" />
+  </app-field>
+
+  <app-field controlId="audience" label="Vous êtes" error="Choisissez ce qui vous correspond.">
+    <select appControl formControlName="audience" required>
+      <option value="" disabled>Choisissez</option>
+      @for (audience of audiences(); track audience.slug) {
+        <option [value]="audience.slug">{{ audience.label }}</option>
+      }
+    </select>
+  </app-field>
+
+  <fieldset class="field-group">
+    <legend>
+      Comment vous répondre <span class="form-field__hint">(au moins un des deux)</span>
+    </legend>
+    <app-field
+      controlId="email"
+      label="E-mail"
+      error="Cette adresse e-mail n'est pas valide."
+      describedBy="contact-error"
+      [markInvalid]="contactMissing()"
+    >
+      <input appControl type="email" formControlName="email" autocomplete="email" />
+    </app-field>
+    <app-field
+      controlId="phone"
+      label="Téléphone"
+      error="Ce numéro n'est pas valide. Exemple : +227 90 00 00 00."
+      describedBy="contact-error"
+      [markInvalid]="contactMissing()"
+    >
+      <input appControl type="tel" formControlName="phone" autocomplete="tel" />
+    </app-field>
+    @if (contactMissing()) {
+      <p id="contact-error" class="form-field__error">Indiquez un e-mail ou un téléphone.</p>
+    }
+  </fieldset>
+
+  <app-field
+    controlId="message"
+    label="Votre message"
+    error="Décrivez votre besoin en 10 à 2000 caractères."
+  >
+    <textarea appControl rows="6" formControlName="message" required></textarea>
+  </app-field>
+
+  <div class="trap" aria-hidden="true">
+    <label for="website">Ne pas remplir</label>
+    <input id="website" type="text" formControlName="website" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <p class="form__notice">Vos informations servent uniquement à répondre à votre demande.</p>
+
+  <button class="btn btn--primary form__submit" type="submit" [disabled]="sending() || disabled()">
+    {{ sending() ? 'Envoi en cours…' : 'Envoyer le message' }}
+    <app-icon [data]="sendIcon" [size]="20" />
+  </button>
+</form>

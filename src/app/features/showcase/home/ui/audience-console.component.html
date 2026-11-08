@@ -1,0 +1,43 @@
+<div class="console">
+  <ul class="console__choices">
+    @for (audience of audiences; track audience.slug) {
+      <li>
+        <button
+          class="choice"
+          type="button"
+          [class.choice--on]="selected() === audience.slug"
+          [attr.aria-pressed]="selected() === audience.slug"
+          (click)="selected.set(audience.slug)"
+        >
+          <app-icon [data]="audience.icon" [size]="28" />
+          <span>{{ audience.label }}</span>
+        </button>
+      </li>
+    }
+  </ul>
+
+  <div class="console__screen">
+    <div class="console__output">
+      @for (line of lines(); track selected() + $index) {
+        <p class="line line--{{ line.kind }}" [style.--line]="$index">
+          @switch (line.kind) {
+            @case ('command') {
+              <span class="line__prompt" aria-hidden="true">$ </span>{{ line.text }}
+            }
+            @case ('tag') {
+              <span class="line__tag">{{ line.tag }}</span> {{ line.text }}
+            }
+            @default {
+              {{ line.text }}
+            }
+          }
+        </p>
+      }
+      <span class="console__cursor" aria-hidden="true"></span>
+    </div>
+    <a class="btn btn--on-night console__link" [routerLink]="['/', selected()]">
+      Voir la page complète
+      <app-icon [data]="arrow" [size]="20" />
+    </a>
+  </div>
+</div>

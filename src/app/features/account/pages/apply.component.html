@@ -1,0 +1,108 @@
+<div class="container page">
+  @if (listing(); as item) {
+    @switch (stage()) {
+      @case ('sent') {
+        <div
+          #confirmation
+          class="state confirmation"
+          tabindex="-1"
+          data-testid="apply-confirmation"
+        >
+          <h1 class="state-title">{{ text.sentTitle }}</h1>
+          <p>{{ text.sentHelp }}</p>
+          <a class="btn btn--primary btn--small" routerLink="/compte">{{ text.toAccount }}</a>
+        </div>
+      }
+      @case ('already') {
+        <div class="state" data-testid="apply-already">
+          <h1 class="state-title">{{ text.alreadyTitle }}</h1>
+          <a class="btn btn--primary btn--small" routerLink="/compte">{{ text.toAccount }}</a>
+        </div>
+      }
+      @default {
+        <header class="head">
+          <p class="eyebrow">{{ text.applyEyebrow }}</p>
+          <h1>
+            <a [routerLink]="link(item)">{{ text.applyTitle(item.title) }}</a>
+          </h1>
+        </header>
+        @if (acceptsOnline()) {
+          <form class="form" novalidate appFocusInvalid [formGroup]="form" (ngSubmit)="submit()">
+            @if (savedCv(); as saved) {
+              <fieldset class="choices" data-testid="apply-cv-choice">
+                <legend>{{ text.cvChoice }}</legend>
+                <label class="choice"
+                  ><input
+                    type="radio"
+                    name="cv-source"
+                    data-testid="apply-cv-saved"
+                    [checked]="useSaved()"
+                    (change)="useSaved.set(true)"
+                  />
+                  {{ text.cvUseSaved(saved.name) }}</label
+                >
+                <label class="choice"
+                  ><input
+                    type="radio"
+                    name="cv-source"
+                    data-testid="apply-cv-other"
+                    [checked]="!useSaved()"
+                    (change)="useSaved.set(false)"
+                  />
+                  {{ text.cvUseOther }}</label
+                >
+              </fieldset>
+            }
+            @if (!useSaved()) {
+              <app-field
+                controlId="apply-cv"
+                [label]="text.cv"
+                [hint]="text.cvHelp"
+                [externalError]="cvProblem() ? text.cvErrors[cvProblem()!] : null"
+              >
+                <input
+                  appControl
+                  type="file"
+                  accept=".pdf,.doc,.docx"
+                  data-testid="apply-cv"
+                  (change)="pick($event)"
+                />
+              </app-field>
+              <label class="choice"
+                ><input
+                  type="checkbox"
+                  data-testid="apply-keep-cv"
+                  [checked]="keepCv()"
+                  (change)="keepCv.set(!keepCv())"
+                />
+                {{ text.cvKeep }}</label
+              >
+            }
+            <app-field controlId="apply-letter" [label]="text.letter" [error]="text.letterError">
+              <textarea appControl rows="8" formControlName="letter"></textarea>
+            </app-field>
+            <div>
+              <label class="consent"
+                ><input type="checkbox" formControlName="consent" data-testid="apply-consent" />
+                {{ text.consent }}</label
+              >
+              @if (invalid('consent')) {
+                <p class="form-field__error">{{ text.consentError }}</p>
+              }
+            </div>
+            @if (failed()) {
+              <p class="form-field__error" role="alert">{{ text.sendError }}</p>
+            }
+            <button class="btn btn--primary" type="submit" data-testid="apply-submit">
+              {{ text.submit }}
+            </button>
+          </form>
+        } @else {
+          <div class="state" data-testid="apply-unavailable">
+            <p>{{ text.missingTitle }}</p>
+          </div>
+        }
+      }
+    }
+  }
+</div>

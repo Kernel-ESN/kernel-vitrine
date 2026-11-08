@@ -1,0 +1,121 @@
+<section class="head">
+  <div class="container head__inner">
+    <h1 data-testid="list-title">{{ title() }}</h1>
+    <app-search-box [value]="query().text" [region]="searchRegion()" (searched)="search($event)" />
+  </div>
+</section>
+
+<div class="container layout">
+  <aside class="layout__filters">
+    <app-listing-filters
+      [query]="query()"
+      [facets]="store.facets()"
+      [total]="store.page()?.total ?? 0"
+      (changed)="applyFilters($event)"
+      (cleared)="clearFilters()"
+    />
+  </aside>
+
+  <section class="layout__results" aria-labelledby="results-count">
+    <div class="toolbar">
+      <h2 id="results-count" class="toolbar__count" aria-live="polite" data-testid="results-count">
+        {{ text.list.count(store.page()?.total ?? 0) }}
+      </h2>
+      <div class="toolbar__actions">
+        <a
+          class="alert-link"
+          routerLink="/alertes/nouvelle"
+          [queryParams]="alertParams()"
+          data-testid="create-alert"
+        >
+          <app-icon [data]="icons.alert" [size]="20" />
+          {{ text.list.createAlert }}
+        </a>
+        <div class="toolbar__sort">
+          <label for="listing-sort">{{ text.list.sort }}</label>
+          <select id="listing-sort" class="control" (change)="sort($event)">
+            <option value="recent" [selected]="query().sort === 'recent'">
+              {{ text.list.sortRecent }}
+            </option>
+            <option value="expire" [selected]="query().sort === 'expire'">
+              {{ text.list.sortExpire }}
+            </option>
+            <option value="pertinence" [selected]="query().sort === 'pertinence'">
+              {{ text.list.sortRelevance }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    @if (chips().length) {
+      <ul class="chips" data-testid="active-filters">
+        @for (chip of chips(); track chip.field + chip.value) {
+          <li>
+            <button
+              class="chip"
+              type="button"
+              [attr.aria-label]="text.filters.removeFilter(chip.label)"
+              (click)="removeFilter(chip.field, chip.value)"
+            >
+              {{ chip.label }}
+              <app-icon [data]="icons.remove" [size]="16" />
+            </button>
+          </li>
+        }
+      </ul>
+    }
+
+    @switch (store.status()) {
+      @case ('error') {
+        <div class="state" role="alert" data-testid="list-error">
+          <h3>{{ text.list.errorTitle }}</h3>
+          <p>{{ text.list.errorHelp }}</p>
+          <button class="btn btn--primary btn--small" type="button" (click)="store.retry()">
+            {{ text.list.retry }}
+          </button>
+        </div>
+      }
+      @default {
+        @if (store.page(); as page) {
+          @if (page.total === 0 && store.status() === 'ready') {
+            <div class="state" data-testid="list-empty">
+              <h3>{{ text.list.emptyTitle }}</h3>
+              <p>{{ text.list.emptyHelp }}</p>
+            </div>
+          }
+          <ul class="results" [attr.aria-busy]="store.status() === 'loading'">
+            @for (listing of page.items; track listing.id) {
+              <li><app-listing-card [listing]="listing" /></li>
+            }
+          </ul>
+          @if (page.items.length && page.total > page.items.length) {
+            <p class="progress" data-testid="results-progress">
+              {{ text.list.progress(page.items.length, page.total) }}
+            </p>
+          }
+          @if (hasMore()) {
+            <button
+              class="btn btn--secondary more"
+              type="button"
+              data-testid="load-more"
+              (click)="more()"
+            >
+              {{ text.list.more }}
+            </button>
+          }
+        } @else {
+          <ul class="results" [attr.aria-label]="text.list.loading" data-testid="list-loading">
+            @for (item of skeletons; track item) {
+              <li class="skeleton-card">
+                <span class="skeleton skeleton--short"></span>
+                <span class="skeleton skeleton--title"></span>
+                <span class="skeleton skeleton--line"></span>
+              </li>
+            }
+          </ul>
+        }
+      }
+    }
+  </section>
+</div>

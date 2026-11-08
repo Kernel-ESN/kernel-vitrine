@@ -1,0 +1,75 @@
+<app-page-hero
+  [eyebrow]="nav().label"
+  [title]="audience().tagline"
+  [lead]="audience().intro"
+  [icon]="nav().icon"
+  [photo]="photo()"
+/>
+
+<section class="section" aria-labelledby="scene-title">
+  <div class="container split">
+    <div appReveal>
+      <p class="eyebrow">Une situation parmi d'autres</p>
+      <h2 id="scene-title" class="visually-small">Sur le terrain</h2>
+    </div>
+    <p class="statement" appReveal>{{ audience().scene }}</p>
+  </div>
+</section>
+
+<section class="section section--mist" aria-labelledby="needs-title">
+  <div class="container split">
+    <div appReveal>
+      <p class="eyebrow">Ce qu'on nous demande</p>
+      <h2 id="needs-title">Vos besoins</h2>
+    </div>
+    <ul class="needs">
+      @for (need of audience().needs; track need) {
+        <li appReveal>
+          <app-icon class="needs__check" [data]="icons.check" [size]="24" />
+          <span>{{ need }}</span>
+        </li>
+      }
+    </ul>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="response-title">
+  <div class="container">
+    <div class="section__head" appReveal>
+      <p class="eyebrow">Notre réponse</p>
+      <h2 id="response-title">Ce que nous prenons en charge</h2>
+    </div>
+    <ul class="responses">
+      @for (expertise of expertises; track expertise.key) {
+        <li appReveal>
+          <a class="response" [routerLink]="['/services', expertise.slug]">
+            <span class="response__head">
+              <app-icon [data]="expertise.icon" [size]="32" />
+              <strong>{{ expertise.label }}</strong>
+            </span>
+            <span>{{ audience().responses[expertise.key] }}</span>
+            <app-icon class="response__arrow" [data]="icons.arrow" [size]="20" />
+          </a>
+        </li>
+      }
+    </ul>
+  </div>
+</section>
+
+<app-cta-band [title]="audience().cta + '.'" [action]="audience().cta" [audienceSlug]="slug()" />
+
+<section class="section" aria-labelledby="others-title">
+  <div class="container">
+    <h2 id="others-title" class="others__title">Vous n'êtes pas au bon endroit ?</h2>
+    <ul class="others">
+      @for (other of others(); track other.slug) {
+        <li>
+          <a [routerLink]="['/', other.slug]">
+            <app-icon [data]="other.icon" [size]="24" />
+            {{ other.label }}
+          </a>
+        </li>
+      }
+    </ul>
+  </div>
+</section>

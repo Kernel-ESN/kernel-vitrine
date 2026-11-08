@@ -1,0 +1,212 @@
+<div class="container page">
+  <header class="head">
+    <p class="eyebrow">{{ text.wizardEyebrow }}</p>
+    <h1>{{ text.wizardTitle }}</h1>
+  </header>
+
+  @if (moderationNote(); as note) {
+    <p class="draft-note" role="status" data-testid="draft-moderation-note">
+      <strong>{{ text.moderationDraft }}</strong> {{ note }}
+    </p>
+  }
+
+  <ol class="steps" [attr.aria-label]="text.stepOf(step(), 3)">
+    @for (label of text.steps; track label; let index = $index) {
+      <li
+        [class.is-done]="index < step()"
+        [attr.aria-current]="index + 1 === step() ? 'step' : null"
+      >
+        {{ label }}
+      </li>
+    }
+  </ol>
+
+  <form class="form" novalidate appFocusInvalid [formGroup]="form" (ngSubmit)="next()">
+    @switch (step()) {
+      @case (1) {
+        <fieldset>
+          <legend>{{ text.chooseType }}</legend>
+          <p class="hint">{{ text.typeHelp }}</p>
+          @for (universe of universes; track universe.id) {
+            <p class="eyebrow">{{ universe.label }}</p>
+            <div class="type-grid">
+              @for (type of universe.types; track type) {
+                <label class="type-option">
+                  <input
+                    type="radio"
+                    name="listing-type"
+                    [value]="type"
+                    [checked]="form.controls.type.value === type"
+                    [attr.data-testid]="'type-' + type"
+                    (change)="chooseType(type)"
+                  />
+                  {{ labels[type] }}
+                </label>
+              }
+            </div>
+          }
+          @if (invalid('type')) {
+            <p class="form-field__error" data-testid="type-error">{{ text.required }}</p>
+          }
+        </fieldset>
+      }
+      @case (2) {
+        <app-field controlId="p-title" [label]="text.title" [error]="text.titleError">
+          <input appControl formControlName="title" />
+        </app-field>
+        <app-field
+          controlId="p-summary"
+          [label]="text.summary"
+          [hint]="text.summaryHelp"
+          [error]="text.summaryError"
+        >
+          <textarea appControl rows="3" formControlName="summary"></textarea>
+        </app-field>
+        <app-field
+          controlId="p-description"
+          [label]="text.description"
+          [error]="text.descriptionError"
+        >
+          <textarea appControl rows="10" formControlName="description"></textarea>
+        </app-field>
+        <div class="pair">
+          <app-field controlId="p-sector" [label]="text.sector" [error]="text.required">
+            <select appControl formControlName="sectorId">
+              <option value="" disabled></option>
+              @for (option of sectors; track option.id) {
+                <option [value]="option.id">{{ option.label }}</option>
+              }
+            </select>
+          </app-field>
+          <app-field controlId="p-region" [label]="text.region" [error]="text.required">
+            <select appControl formControlName="regionId">
+              <option value="" disabled></option>
+              @for (option of regions; track option.id) {
+                <option [value]="option.id">{{ option.label }}</option>
+              }
+            </select>
+          </app-field>
+          <app-field controlId="p-city" [label]="text.city" [error]="text.required">
+            <input appControl formControlName="city" />
+          </app-field>
+          <app-field controlId="p-deadline" [label]="text.deadline" [error]="text.deadlineError">
+            <input appControl type="date" formControlName="deadline" [min]="minDate" />
+          </app-field>
+        </div>
+        <app-field controlId="p-budget" [label]="text.budget" [error]="text.budgetError">
+          <input appControl type="number" min="1" inputmode="numeric" formControlName="budget" />
+        </app-field>
+        <fieldset>
+          <legend>{{ text.applyMode }}</legend>
+          <label class="choice"
+            ><input type="radio" formControlName="applyMode" value="EN_LIGNE" />
+            {{ text.applyOnline }}</label
+          >
+          <label class="choice"
+            ><input type="radio" formControlName="applyMode" value="EMAIL" />
+            {{ text.applyEmail }}</label
+          >
+          <label class="choice"
+            ><input type="radio" formControlName="applyMode" value="LIEN" />
+            {{ text.applyLink }}</label
+          >
+        </fieldset>
+        @if (form.controls.applyMode.value === 'EMAIL') {
+          <app-field
+            controlId="p-email"
+            [label]="text.applyEmailField"
+            [error]="text.applyEmailError"
+            [externalError]="
+              contactMissing === 'email' && form.touched ? text.applyEmailError : null
+            "
+          >
+            <input appControl type="email" formControlName="applyEmail" />
+          </app-field>
+        }
+        @if (form.controls.applyMode.value === 'LIEN') {
+          <app-field
+            controlId="p-url"
+            [label]="text.applyUrlField"
+            [error]="text.applyUrlError"
+            [externalError]="contactMissing === 'url' && form.touched ? text.applyUrlError : null"
+          >
+            <input appControl type="url" formControlName="applyUrl" />
+          </app-field>
+        }
+        <app-field controlId="p-instructions" [label]="text.instructions" [error]="text.required">
+          <textarea appControl rows="3" formControlName="instructions"></textarea>
+        </app-field>
+      }
+      @case (3) {
+        <p>{{ text.preview }}</p>
+        @let view = preview();
+        <article class="preview" data-testid="publish-preview">
+          <p class="eyebrow">{{ view.typeLabel }}</p>
+          <h2>{{ view.title }}</h2>
+          <p>{{ view.summary }}</p>
+          <dl>
+            <div>
+              <dt>{{ text.sector }} :</dt>
+              <dd>{{ view.sector }}</dd>
+            </div>
+            <div>
+              <dt>{{ text.city }} :</dt>
+              <dd>{{ view.city }}, {{ view.region }}</dd>
+            </div>
+            <div>
+              <dt>{{ text.deadline }} :</dt>
+              <dd>{{ view.day }}</dd>
+            </div>
+            @if (view.money) {
+              <div>
+                <dt>{{ text.budget }} :</dt>
+                <dd>{{ view.money }}</dd>
+              </div>
+            }
+          </dl>
+          <p>{{ view.description }}</p>
+          <p>{{ view.instructions }}</p>
+        </article>
+      }
+    }
+
+    @if (failed()) {
+      <p class="form-field__error" role="alert">{{ text.saveError }}</p>
+    }
+    @if (draftSaved()) {
+      <p role="status" data-testid="draft-saved">{{ text.draftSaved }}</p>
+    }
+
+    <div class="actions">
+      @if (step() > 1) {
+        <button class="btn btn--secondary" type="button" data-testid="wizard-back" (click)="back()">
+          {{ text.back }}
+        </button>
+      }
+      @if (step() < 3) {
+        <button class="btn btn--primary" type="submit" data-testid="wizard-next">
+          {{ text.next }}
+        </button>
+      } @else {
+        <button
+          class="btn btn--primary"
+          type="button"
+          data-testid="wizard-submit"
+          (click)="submit()"
+        >
+          {{ text.submit }}
+        </button>
+      }
+      @if (step() > 1) {
+        <button
+          class="btn btn--secondary"
+          type="button"
+          data-testid="wizard-draft"
+          (click)="saveDraft()"
+        >
+          {{ text.saveDraft }}
+        </button>
+      }
+    </div>
+  </form>
+</div>

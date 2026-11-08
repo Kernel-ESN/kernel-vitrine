@@ -1,0 +1,199 @@
+<section class="hero on-night">
+  <app-signal-field />
+  <div class="container hero__inner">
+    <p class="eyebrow hero__eyebrow">
+      Ingénierie informatique · {{ site.location }} · {{ site.coordinates }}
+    </p>
+    <h1 class="hero__title">
+      Des systèmes qui tiennent, même quand le réseau lâche.<span
+        class="cursor"
+        aria-hidden="true"
+      ></span>
+    </h1>
+    <p class="lead hero__lead">
+      Kernel Consulting développe vos applications, fait tourner vos serveurs, met de l'ordre dans
+      vos données et protège le tout. Pour des ministères, des ONG, des entreprises et des
+      particuliers.
+    </p>
+    <div class="hero__actions">
+      <a class="btn btn--on-night" routerLink="/contact">
+        Parler à un ingénieur
+        <app-icon [data]="arrow" [size]="20" />
+      </a>
+      <a class="btn btn--outline-night" routerLink="/methode">Comment nous travaillons</a>
+    </div>
+  </div>
+  <div class="container hero__strip-wrap">
+    <ul class="hero__strip">
+      @for (item of expertises; track item.key) {
+        <li>
+          <a [routerLink]="['/services', item.slug]">
+            <app-icon [data]="item.icon" [size]="24" />
+            {{ item.label }}
+          </a>
+        </li>
+      }
+    </ul>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="scenes-title">
+  <div class="container scenes">
+    <div class="scenes__head">
+      <p class="eyebrow">Sur le terrain</p>
+      <h2 id="scenes-title">Ce qui arrive quand personne ne s'occupe du système.</h2>
+    </div>
+    <ol class="scenes__list">
+      @for (scene of scenes; track scene; let index = $index) {
+        <li class="scene" appReveal>
+          <span class="scene__number" aria-hidden="true">0{{ index + 1 }}</span>
+          <p class="statement">{{ scene }}</p>
+        </li>
+      }
+    </ol>
+  </div>
+</section>
+
+<section class="section section--deep on-night" aria-labelledby="core-title">
+  <div class="container">
+    <div class="section__head" appReveal>
+      <p class="eyebrow">Le noyau</p>
+      <h2 id="core-title">
+        Le code, la base, le serveur et les accès, regardés par la même équipe.
+      </h2>
+      <p class="lead core-lead">
+        Une application lente, c'est parfois le code, parfois la base de données, parfois le
+        serveur. Chez nous, ces métiers travaillent à la même table.
+      </p>
+    </div>
+    <app-kernel-core appReveal />
+  </div>
+</section>
+
+<section class="section" aria-labelledby="offers-title">
+  <div class="container">
+    <div class="section__head offers__head" appReveal>
+      <div>
+        <p class="eyebrow">Offres</p>
+        <h2 id="offers-title">Les demandes les plus courantes, avec un prix de départ affiché.</h2>
+      </div>
+      <a class="text-link" routerLink="/offres">
+        Toutes les offres
+        <app-icon [data]="arrow" [size]="20" />
+      </a>
+    </div>
+    <ul class="offers">
+      @for (offer of offers; track offer.slug) {
+        <li appReveal>
+          <a class="offer" [routerLink]="['/offres', offer.slug]" data-testid="home-offer">
+            <app-icon
+              class="offer__icon"
+              [data]="offer.icon"
+              [size]="28"
+              [style.view-transition-name]="'offer-' + offer.slug + '-icon'"
+            />
+            <strong>{{ offer.label }}</strong>
+            <span>{{ offer.blurb }}</span>
+            <app-icon class="offer__arrow" [data]="arrow" [size]="22" />
+          </a>
+        </li>
+      }
+    </ul>
+  </div>
+</section>
+
+<section id="clients" class="section section--mist" aria-labelledby="clients-title">
+  <div class="container">
+    <div class="section__head" appReveal>
+      <p class="eyebrow">Pour qui</p>
+      <h2 id="clients-title">Vous êtes…</h2>
+    </div>
+    <app-audience-console appReveal />
+  </div>
+</section>
+
+<section class="section" aria-labelledby="figures-title">
+  <div class="container figures">
+    <div class="section__head" appReveal>
+      <p class="eyebrow">En chiffres</p>
+      <h2 id="figures-title">Au Niger, le site se consulte d'abord sur un téléphone.</h2>
+    </div>
+    <dl class="figures__list">
+      @for (figure of figures; track figure.value) {
+        <div appReveal>
+          <dt class="figures__value" appCountUp>{{ figure.value }}</dt>
+          <dd>{{ figure.text }}</dd>
+        </div>
+      }
+    </dl>
+    <app-photo class="figures__photo" name="niameyFleuve" ratio="21 / 8" />
+    <p class="figures__source">
+      Source :
+      <a [href]="figuresSource.url" target="_blank" rel="noopener">{{ figuresSource.label }}</a>
+    </p>
+  </div>
+</section>
+
+<section class="section section--mist" aria-labelledby="local-title">
+  <div class="container local">
+    <div class="local__head" appReveal>
+      <p class="eyebrow">Basés à Niamey</p>
+      <h2 id="local-title">Construit pour les conditions d'ici.</h2>
+      <p class="local__weight statement" data-testid="page-weight"><app-page-weight /></p>
+    </div>
+    <ul class="local__list">
+      @for (item of conditions; track item.title; let index = $index) {
+        <li appReveal>
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.text }}</p>
+        </li>
+      }
+    </ul>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="method-title">
+  <div class="container">
+    <div class="section__head" appReveal>
+      <p class="eyebrow">Méthode</p>
+      <h2 id="method-title">Vous savez toujours où on en est, et combien ça coûte.</h2>
+    </div>
+    <ol class="steps">
+      @for (step of steps; track step.title; let index = $index) {
+        <li class="step" appReveal>
+          <span class="step__number" aria-hidden="true">0{{ index + 1 }}</span>
+          <h3>{{ step.title }}</h3>
+          <p>{{ step.text }}</p>
+        </li>
+      }
+    </ol>
+    <a class="text-link steps__more" routerLink="/methode">
+      Le détail de chaque étape
+      <app-icon [data]="arrow" [size]="20" />
+    </a>
+  </div>
+</section>
+
+<section class="section section--mist" aria-labelledby="team-title">
+  <div class="container team">
+    <div appReveal>
+      <p class="eyebrow">Qui nous sommes</p>
+      <h2 id="team-title">Vous parlez à ceux qui font le travail.</h2>
+    </div>
+    <div class="team__text" appReveal>
+      <p class="lead">
+        Kernel Consulting a été fondée au Niger par Ahmed Abdoulahi, ingénieur en développement et
+        cloud, et Saratou Anaroua Fodi, ingénieure en data sciences. Ce sont eux que vous aurez au
+        téléphone, et des collaborateurs spécialisés rejoignent les projets selon le domaine.
+      </p>
+      <a class="text-link" routerLink="/a-propos">
+        Mieux nous connaître
+        <app-icon [data]="arrow" [size]="20" />
+      </a>
+    </div>
+  </div>
+</section>
+
+<app-partners />
+
+<app-cta-band />

@@ -1,0 +1,153 @@
+// Pied de page : une grille, deux zones (identité, plan du site), puis une barre légale.
+.footer {
+  display: block;
+  background: var(--color-night);
+  color: var(--color-frost);
+}
+
+.footer__grid {
+  display: grid;
+  gap: var(--space-12);
+  padding-block: var(--space-16) var(--space-12);
+}
+
+a {
+  color: var(--color-white);
+  text-decoration: none;
+  transition: color var(--transition-hover);
+}
+
+@media (hover: hover) {
+  a:hover {
+    color: var(--color-kernel);
+  }
+}
+
+// Identité
+.footer__brand {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: var(--space-6);
+}
+
+// Alignement optique : le haut des lettres du logo s'aligne sur les titres des colonnes.
+.footer__brand app-logo {
+  margin-top: calc(var(--logo-header) * -0.2);
+}
+
+.footer__pitch {
+  max-width: 22rem;
+  color: var(--color-frost);
+  font-size: var(--text-lead);
+  line-height: 1.45;
+}
+
+.footer__contact {
+  display: grid;
+  gap: var(--space-2);
+  font-style: normal;
+}
+
+.footer__row {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--target-min);
+}
+
+.footer__row app-icon {
+  color: var(--color-kernel);
+}
+
+// La couleur des liens du pied de page ne s'applique pas au bouton.
+.footer__cta,
+.footer__cta:hover {
+  color: var(--color-night);
+}
+
+@media (hover: hover) {
+  .footer__cta:hover {
+    color: var(--color-white);
+  }
+}
+
+// Plan du site
+.footer__nav {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-8) var(--space-6);
+}
+
+.footer__title {
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-3);
+  border-bottom: var(--rule-night);
+  color: var(--color-kernel);
+  font-family: var(--font-mono);
+  font-size: var(--text-eyebrow);
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+ul {
+  display: grid;
+}
+
+li a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target-min);
+  padding-block: var(--space-2);
+  font-size: var(--text-small);
+  line-height: 1.4;
+}
+
+.footer__more {
+  color: var(--color-kernel);
+}
+
+// Barre légale
+.footer__bar {
+  border-top: var(--rule-night);
+}
+
+.footer__bar-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-6);
+  padding-block: var(--space-4);
+  font-size: var(--text-small);
+}
+
+.footer__bar a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target-min);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.footer__coordinates {
+  color: var(--color-kernel);
+  font-family: var(--font-mono);
+  font-size: var(--text-eyebrow);
+  letter-spacing: 0.08em;
+}
+
+@media (min-width: 48rem) {
+  .footer__nav {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 72rem) {
+  .footer__grid {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: var(--space-16);
+  }
+}

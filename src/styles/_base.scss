@@ -1,0 +1,376 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-padding-top: 6rem;
+}
+
+html.smooth-anchors {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--color-white);
+  color: var(--color-night);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+ol,
+dl,
+dd {
+  margin: 0;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+// La charte s'arrête à la graisse 600 : pas de gras synthétique.
+strong,
+b {
+  font-weight: 600;
+}
+
+h1,
+h2 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--text-h1);
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: var(--text-h2);
+  line-height: 1.2;
+}
+
+h3 {
+  font-size: var(--text-h3);
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+.statement {
+  font-size: var(--text-statement);
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
+
+.lead {
+  font-size: var(--text-lead);
+  line-height: 1.5;
+}
+
+a {
+  color: var(--color-deep);
+  text-underline-offset: 0.18em;
+  transition: color var(--transition-hover);
+}
+
+@media (hover: hover) {
+  a:hover {
+    color: var(--color-abyss);
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-deep);
+  outline-offset: 3px;
+}
+
+.on-night :focus-visible,
+.on-night:focus-visible {
+  outline-color: var(--color-kernel);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--color-deep);
+  font-family: var(--font-mono);
+  font-size: var(--text-eyebrow);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.eyebrow::before {
+  flex: none;
+  width: 1.5rem;
+  height: 1px;
+  background: currentcolor;
+  content: '';
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.section {
+  padding-block: var(--space-24);
+}
+
+.section--mist {
+  background: var(--color-mist);
+}
+
+.section--night {
+  background: var(--color-night);
+  color: var(--color-white);
+}
+
+.section--deep {
+  --rule-night: 1px solid var(--color-kernel);
+
+  background: var(--color-deep);
+  color: var(--color-white);
+}
+
+.section--deep .eyebrow {
+  color: var(--color-white);
+}
+
+.section--deep :focus-visible {
+  outline-color: var(--color-white);
+}
+
+.section--night .eyebrow {
+  color: var(--color-kernel);
+}
+
+.section--kernel {
+  background: var(--color-kernel);
+  color: var(--color-night);
+}
+
+.section--kernel .eyebrow {
+  color: var(--color-night);
+}
+
+.section__head {
+  display: grid;
+  gap: var(--space-4);
+  max-width: 60rem;
+  margin-bottom: var(--space-12);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  max-width: 100%;
+  padding: 1rem 1.625rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  font: inherit;
+  font-weight: 500;
+  line-height: 1.3;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background var(--transition-hover),
+    border-color var(--transition-hover),
+    color var(--transition-hover);
+}
+
+.btn:disabled {
+  background: var(--color-frost);
+  color: var(--color-slate);
+  cursor: not-allowed;
+}
+
+.btn--primary {
+  background: var(--color-deep);
+  color: var(--color-white);
+}
+
+@media (hover: hover) {
+  .btn--primary:hover:not(:disabled) {
+    background: var(--color-abyss);
+    color: var(--color-white);
+  }
+}
+
+// Sur fond Nuit (charte §10). Le survol de l'azur manquerait de contraste : bleu profond.
+.btn--on-night {
+  background: var(--color-kernel);
+  color: var(--color-night);
+  font-weight: 600;
+}
+
+@media (hover: hover) {
+  .btn--on-night:hover {
+    background: var(--color-deep);
+    color: var(--color-white);
+  }
+}
+
+.btn--outline-night {
+  border-color: var(--color-slate);
+  color: var(--color-white);
+}
+
+@media (hover: hover) {
+  .btn--outline-night:hover {
+    border-color: var(--color-kernel);
+    color: var(--color-white);
+  }
+}
+
+// « En savoir plus » (charte §10) : trait de 1 px au survol seulement.
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--target-min);
+  font-weight: 500;
+  text-decoration: underline transparent 1px;
+  text-underline-offset: 0.3em;
+  transition:
+    color var(--transition-hover),
+    text-decoration-color var(--transition-hover);
+}
+
+@media (hover: hover) {
+  .text-link:hover {
+    text-decoration-color: currentColor;
+  }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(1rem);
+  transition:
+    opacity 600ms var(--ease),
+    transform 600ms var(--ease);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.reveal--in {
+  opacity: 1;
+  transform: none;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--transition-hover);
+  animation-timing-function: var(--ease);
+}
+
+// Éléments partagés entre deux pages : ils glissent de leur place à la nouvelle.
+::view-transition-group(*) {
+  animation-duration: 420ms;
+  animation-timing-function: var(--ease);
+}
+
+::view-transition-old(*),
+::view-transition-new(*) {
+  height: 100%;
+}
+
+.instant-transition::view-transition-old(root),
+.instant-transition::view-transition-new(root),
+.instant-transition::view-transition-group(*) {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.smooth-anchors {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after,
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+// Signature : le curseur du logo, à la fin des grands titres. Il clignote quatre fois, puis reste.
+.cursor {
+  display: inline-block;
+  width: 0.07em;
+  height: 0.78em;
+  margin-left: 0.14em;
+  background: var(--color-kernel);
+  vertical-align: -0.06em;
+  animation: cursor-blink 1060ms step-end 4;
+}
+
+@keyframes cursor-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor {
+    animation: none;
+  }
+}
+
+// Signature : chaque section de page est numérotée, comme un dossier technique.
+main {
+  counter-reset: kernel-section;
+}
+
+main .section .eyebrow {
+  counter-increment: kernel-section;
+}
+
+main .section .eyebrow::before {
+  width: auto;
+  height: auto;
+  background: none;
+  content: counter(kernel-section, decimal-leading-zero) ' /';
+  opacity: 0.7;
+}
+
+// Trame de points des fonds bleu nuit, sur la droite.
+.texture-dots {
+  position: absolute;
+  inset: 0 0 0 58%;
+  // Point Ardoise de 1,2 px tous les 24 px : un motif, pas un dégradé.
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='12' cy='12' r='1.2' fill='%235a7487'/%3E%3C/svg%3E");
+  background-size: 1.5rem 1.5rem;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+@media (max-width: 47.99rem) {
+  .texture-dots {
+    display: none;
+  }
+}

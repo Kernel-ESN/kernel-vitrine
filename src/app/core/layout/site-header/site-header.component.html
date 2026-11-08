@@ -1,0 +1,260 @@
+<header class="header">
+  <div class="container header__bar">
+    <!-- Le nom accessible vient du logo : il reprend le texte visible, comme l'exige WCAG 2.5.3. -->
+    <a class="header__brand" routerLink="/" (click)="closeAll()">
+      <app-logo class="header__logo" />
+      <span class="visually-hidden">, accueil</span>
+    </a>
+
+    <button
+      class="header__toggle"
+      type="button"
+      [attr.aria-expanded]="menuOpen()"
+      aria-controls="main-nav"
+      [attr.aria-label]="menuOpen() ? 'Fermer le menu' : 'Ouvrir le menu'"
+      (click)="toggleMenu()"
+    >
+      <app-icon [data]="menuOpen() ? icons.close : icons.menu" [size]="28" />
+    </button>
+
+    <nav
+      id="main-nav"
+      class="nav"
+      [class.nav--open]="menuOpen()"
+      aria-label="Navigation principale"
+    >
+      <ul class="nav__list">
+        <li>
+          <button
+            class="nav__item"
+            type="button"
+            [attr.aria-expanded]="panel() === 'expertises'"
+            aria-controls="panel-expertises"
+            (click)="togglePanel('expertises')"
+          >
+            Services
+            <app-icon
+              class="nav__chevron"
+              [class.nav__chevron--up]="panel() === 'expertises'"
+              [data]="icons.chevron"
+              [size]="18"
+            />
+          </button>
+          <div id="panel-expertises" class="panel" [hidden]="panel() !== 'expertises'">
+            <div class="container panel__inner">
+              <div class="panel__intro">
+                <p class="eyebrow">Services</p>
+                <a class="text-link" routerLink="/services" (click)="closeAll()"
+                  >Voir les quatre métiers</a
+                >
+              </div>
+              <ul class="panel__grid">
+                @for (item of expertises; track item.key) {
+                  <li>
+                    <a
+                      class="panel__link"
+                      [routerLink]="['/services', item.slug]"
+                      (click)="closeAll()"
+                    >
+                      <app-icon [data]="item.icon" [size]="28" />
+                      <span>
+                        <strong>{{ item.label }}</strong>
+                        <small>{{ item.blurb }}</small>
+                      </span>
+                    </a>
+                  </li>
+                }
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li>
+          <button
+            class="nav__item"
+            type="button"
+            [class.is-active]="onOffers()"
+            [attr.aria-expanded]="panel() === 'offres'"
+            aria-controls="panel-offres"
+            (click)="togglePanel('offres')"
+          >
+            Offres
+            <app-icon
+              class="nav__chevron"
+              [class.nav__chevron--up]="panel() === 'offres'"
+              [data]="icons.chevron"
+              [size]="18"
+            />
+          </button>
+          <div id="panel-offres" class="panel" [hidden]="panel() !== 'offres'">
+            <div class="container panel__inner">
+              <div class="panel__intro">
+                <p class="eyebrow">Offres</p>
+                <a class="text-link" routerLink="/offres" (click)="closeAll()"
+                  >Voir toutes les offres</a
+                >
+              </div>
+              <ul class="panel__grid">
+                @for (item of offers; track item.slug) {
+                  <li>
+                    <a
+                      class="panel__link"
+                      [routerLink]="['/offres', item.slug]"
+                      (click)="closeAll()"
+                    >
+                      <app-icon [data]="item.icon" [size]="28" />
+                      <span>
+                        <strong>{{ item.label }}</strong>
+                        <small>{{ item.blurb }}</small>
+                      </span>
+                    </a>
+                  </li>
+                }
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li>
+          <button
+            class="nav__item"
+            type="button"
+            [attr.aria-expanded]="panel() === 'clients'"
+            aria-controls="panel-clients"
+            (click)="togglePanel('clients')"
+          >
+            Pour qui
+            <app-icon
+              class="nav__chevron"
+              [class.nav__chevron--up]="panel() === 'clients'"
+              [data]="icons.chevron"
+              [size]="18"
+            />
+          </button>
+          <div id="panel-clients" class="panel" [hidden]="panel() !== 'clients'">
+            <div class="container panel__inner">
+              <div class="panel__intro">
+                <p class="eyebrow">Pour qui</p>
+                <a class="text-link" routerLink="/" fragment="clients" (click)="closeAll()"
+                  >Comparer les besoins</a
+                >
+              </div>
+              <ul class="panel__grid">
+                @for (item of audiences; track item.slug) {
+                  <li>
+                    <a class="panel__link" [routerLink]="['/', item.slug]" (click)="closeAll()">
+                      <app-icon [data]="item.icon" [size]="28" />
+                      <span>
+                        <strong>{{ item.label }}</strong>
+                        <small>{{ item.blurb }}</small>
+                      </span>
+                    </a>
+                  </li>
+                }
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li>
+          <button
+            class="nav__item"
+            type="button"
+            [class.is-active]="onPlatform()"
+            [attr.aria-expanded]="panel() === 'annonces'"
+            aria-controls="panel-annonces"
+            (click)="togglePanel('annonces')"
+          >
+            Annonces
+            <app-icon
+              class="nav__chevron"
+              [class.nav__chevron--up]="panel() === 'annonces'"
+              [data]="icons.chevron"
+              [size]="18"
+            />
+          </button>
+          <div id="panel-annonces" class="panel" [hidden]="panel() !== 'annonces'">
+            <div class="container panel__inner">
+              <div class="panel__intro">
+                <p class="eyebrow">Annonces</p>
+                <a class="text-link" routerLink="/annonces" (click)="closeAll()"
+                  >Voir toutes les annonces</a
+                >
+                <a class="text-link" routerLink="/employeur" (click)="closeAll()"
+                  >Publier une annonce</a
+                >
+              </div>
+              <ul class="panel__grid">
+                @for (item of platform; track item.path) {
+                  <li>
+                    <a class="panel__link" [routerLink]="item.path" (click)="closeAll()">
+                      <app-icon [data]="item.icon" [size]="28" />
+                      <span>
+                        <strong>{{ item.label }}</strong>
+                        <small>{{ item.blurb }}</small>
+                      </span>
+                    </a>
+                  </li>
+                }
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li>
+          <button
+            class="nav__item"
+            type="button"
+            [class.is-active]="onMethod()"
+            [attr.aria-expanded]="panel() === 'methode'"
+            aria-controls="panel-methode"
+            (click)="togglePanel('methode')"
+          >
+            Méthode
+            <app-icon
+              class="nav__chevron"
+              [class.nav__chevron--up]="panel() === 'methode'"
+              [data]="icons.chevron"
+              [size]="18"
+            />
+          </button>
+          <div id="panel-methode" class="panel" [hidden]="panel() !== 'methode'">
+            <div class="container panel__inner">
+              <div class="panel__intro">
+                <p class="eyebrow">Méthode</p>
+                <a class="text-link" routerLink="/methode" (click)="closeAll()"
+                  >Voir la méthode complète</a
+                >
+              </div>
+              <ul class="panel__grid">
+                @for (item of method; track item.fragment) {
+                  <li>
+                    <a
+                      class="panel__link"
+                      routerLink="/methode"
+                      [fragment]="item.fragment"
+                      (click)="closeAll()"
+                    >
+                      <app-icon [data]="item.icon" [size]="28" />
+                      <span>
+                        <strong>{{ item.label }}</strong>
+                        <small>{{ item.blurb }}</small>
+                      </span>
+                    </a>
+                  </li>
+                }
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li>
+          <a
+            class="nav__item"
+            routerLink="/a-propos"
+            routerLinkActive="is-active"
+            ariaCurrentWhenActive="page"
+            >À propos</a
+          >
+        </li>
+        <li><a class="btn btn--primary nav__cta" routerLink="/contact">Nous écrire</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="header__progress" aria-hidden="true"></div>
+</header>

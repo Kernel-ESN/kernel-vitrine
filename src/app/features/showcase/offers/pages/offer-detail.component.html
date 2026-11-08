@@ -1,0 +1,108 @@
+<app-page-hero
+  [morph]="'offer-' + slug()"
+  [photo]="photo()"
+  [eyebrow]="text.eyebrow"
+  [title]="offer().content.headline"
+  [lead]="offer().content.intro"
+  [icon]="offer().nav.icon"
+  [crumbs]="crumbs"
+/>
+
+<div class="container page">
+  <div class="layout">
+    <div class="main">
+      <section aria-labelledby="audience-title">
+        <h2 id="audience-title">{{ text.forWhom }}</h2>
+        <p class="lead">{{ offer().content.audience }}</p>
+      </section>
+
+      <section aria-labelledby="includes-title">
+        <h2 id="includes-title">{{ text.includes }}</h2>
+        <ul class="checks" data-testid="offer-includes">
+          @for (item of offer().content.includes; track item) {
+            <li><app-icon [data]="icons.check" [size]="20" />{{ item }}</li>
+          }
+        </ul>
+      </section>
+
+      @if (offer().content.options.length) {
+        <section aria-labelledby="options-title">
+          <h2 id="options-title">{{ text.options }}</h2>
+          <ul class="checks checks--options">
+            @for (item of offer().content.options; track item) {
+              <li><app-icon [data]="icons.plus" [size]="20" />{{ item }}</li>
+            }
+          </ul>
+        </section>
+      }
+
+      <section aria-labelledby="from-you-title">
+        <h2 id="from-you-title">{{ text.fromYou }}</h2>
+        <ul class="plain">
+          @for (item of offer().content.fromYou; track item) {
+            <li>{{ item }}</li>
+          }
+        </ul>
+      </section>
+
+      <section aria-labelledby="steps-title">
+        <h2 id="steps-title">{{ text.stepsTitle }}</h2>
+        <ol class="steps">
+          @for (step of text.steps; track step.title; let index = $index) {
+            <li>
+              <span class="steps__number" aria-hidden="true">0{{ index + 1 }}</span>
+              <h3>{{ step.title }}</h3>
+              <p>{{ step.text }}</p>
+            </li>
+          }
+        </ol>
+      </section>
+
+      <section aria-labelledby="faq-title">
+        <h2 id="faq-title">{{ text.faq }}</h2>
+        <app-faq [items]="offer().content.faq" />
+      </section>
+    </div>
+
+    <aside class="side">
+      <div class="buy" data-testid="offer-buy">
+        <p class="buy__label">{{ offer().nav.label }}</p>
+        <p class="buy__billing">{{ billing[offer().content.billing] }}</p>
+        @if (subscribed(offer().content.price)) {
+          <app-period-toggle />
+        }
+        <p class="buy__price" data-testid="offer-price">
+          {{ price(offer().content.price, period()) }}
+        </p>
+        @if (priceAfter(offer().content.price, period()); as next) {
+          <p class="buy__then">{{ next }}</p>
+        }
+        @if (saving(offer().content.price, period()); as gift) {
+          <p class="buy__saving" data-testid="offer-saving">{{ gift }}</p>
+        }
+        <p class="buy__help">{{ text.priceHelp }}</p>
+        <a
+          class="btn btn--primary btn--block"
+          [routerLink]="['/offres', offer().nav.slug, 'commander']"
+          data-testid="offer-order"
+        >
+          {{ text.order }}
+        </a>
+        <a
+          class="btn btn--secondary btn--block"
+          routerLink="/contact"
+          [queryParams]="{ objet: 'question' }"
+        >
+          <app-icon [data]="icons.question" [size]="20" />
+          {{ text.question }}
+        </a>
+        <a class="buy__phone" [href]="site.phoneHref">
+          <app-icon [data]="icons.phone" [size]="20" />
+          {{ site.phoneLabel }}
+        </a>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<app-cta-band title="Votre besoin est différent ?" action="Décrire mon besoin" />

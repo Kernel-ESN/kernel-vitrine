@@ -1,0 +1,268 @@
+:host {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: block;
+}
+
+.header {
+  position: relative;
+  border-bottom: var(--rule);
+  background: var(--color-white);
+}
+
+.header__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  padding-block: var(--space-3);
+}
+
+.header__brand {
+  display: inline-block;
+  padding-bottom: 0.25rem;
+  text-decoration: none;
+}
+
+.header__logo {
+  --logo-size: var(--logo-header);
+}
+
+.header__toggle {
+  display: inline-flex;
+  padding: var(--space-2);
+  border: 0;
+  background: none;
+  color: var(--color-night);
+  cursor: pointer;
+}
+
+.nav {
+  display: none;
+}
+
+.nav--open {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  display: block;
+  overflow-y: auto;
+  max-height: calc(100dvh - 6rem);
+  padding: var(--space-4) var(--gutter) var(--space-8);
+  border-bottom: var(--rule);
+  background: var(--color-white);
+}
+
+.nav__list {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.nav__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-3) 0;
+  border: 0;
+  background: none;
+  color: var(--color-night);
+  font: inherit;
+  font-weight: 500;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color var(--transition-hover);
+}
+
+@media (hover: hover) {
+  .nav__item:hover {
+    color: var(--color-abyss);
+  }
+}
+
+.nav__item.is-active {
+  color: var(--color-deep);
+}
+
+.nav__chevron {
+  transition: transform var(--transition-hover) var(--ease);
+}
+
+.nav__chevron--up {
+  transform: rotate(180deg);
+}
+
+.nav__cta {
+  justify-content: center;
+  width: 100%;
+  margin-top: var(--space-3);
+}
+
+.panel[hidden] {
+  display: none;
+}
+
+.panel__inner {
+  display: grid;
+  gap: var(--space-4);
+  padding: 0 0 var(--space-4);
+}
+
+// Sur téléphone, le lien vers la page d'ensemble reste accessible, sans le surtitre.
+.panel__intro {
+  padding-block: var(--space-2);
+}
+
+.panel__intro .eyebrow {
+  display: none;
+}
+
+.panel__grid {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.panel__link {
+  display: flex;
+  gap: var(--space-4);
+  padding: var(--space-3) 0;
+  color: var(--color-night);
+  text-decoration: none;
+}
+
+.panel__link app-icon {
+  color: var(--color-deep);
+}
+
+.panel__link span {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.panel__link strong {
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.panel__link small {
+  color: var(--color-slate);
+  font-size: var(--text-small);
+  line-height: 1.4;
+}
+
+@media (min-width: 72rem) {
+  .header__toggle {
+    display: none;
+  }
+
+  .nav,
+  .nav--open {
+    position: static;
+    display: block;
+    overflow: visible;
+    max-height: none;
+    padding: 0;
+    border: 0;
+  }
+
+  .nav__list {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+  }
+
+  .nav__item {
+    width: auto;
+  }
+
+  .nav__cta {
+    width: auto;
+    margin: 0;
+    padding-block: 0.75rem;
+  }
+
+  .panel {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    border-block: var(--rule);
+    background: var(--color-white);
+    animation: panel-in var(--transition-hover) var(--ease);
+  }
+
+  .panel__inner {
+    grid-template-columns: 18rem minmax(0, 1fr);
+    gap: var(--space-8);
+    padding-block: var(--space-12);
+    padding-inline: var(--gutter);
+  }
+
+  .panel__intro .eyebrow {
+    display: block;
+  }
+
+  .panel__intro {
+    display: grid;
+    padding-block: 0;
+    align-content: start;
+    justify-items: start;
+    gap: var(--space-4);
+  }
+
+  .panel__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-6) var(--space-8);
+  }
+
+  @media (hover: hover) {
+    .panel__link:hover strong {
+      color: var(--color-deep);
+    }
+  }
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+}
+
+// Six entrées tiennent sur une ligne dès 72rem ; l'espacement s'élargit ensuite.
+@media (min-width: 84rem) {
+  .nav__list {
+    gap: var(--space-8);
+  }
+}
+
+// Progression de la lecture : une barre fine sous l'en-tête, pilotée par le défilement.
+.header__progress {
+  display: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  .header__progress {
+    position: absolute;
+    right: 0;
+    bottom: -1px;
+    left: 0;
+    display: block;
+    height: 2px;
+    background: var(--color-deep);
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: reading-progress linear both;
+    animation-timeline: scroll(root block);
+  }
+}
+
+@keyframes reading-progress {
+  to {
+    transform: scaleX(1);
+  }
+}

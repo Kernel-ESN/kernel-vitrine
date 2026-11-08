@@ -1,0 +1,30 @@
+<form class="search" role="search" (submit)="submit($event, field, place)">
+  <div class="search__field">
+    <app-icon class="search__icon" [data]="icons.search" [size]="20" />
+    <label class="visually-hidden" for="listing-search">{{ text.label }}</label>
+    <input
+      #field
+      id="listing-search"
+      class="control search__control"
+      type="search"
+      maxlength="120"
+      enterkeyhint="search"
+      data-testid="search-input"
+      [placeholder]="text.placeholder"
+      [value]="value()"
+    />
+  </div>
+  <div class="search__field">
+    <app-icon class="search__icon" [data]="icons.place" [size]="20" />
+    <label class="visually-hidden" for="listing-place">{{ text.placeLabel }}</label>
+    <select #place id="listing-place" class="control search__control" data-testid="search-region">
+      <option value="" [selected]="!region()">{{ text.anyPlace }}</option>
+      @for (option of regions; track option.id) {
+        <option [value]="option.id" [selected]="option.id === region()">{{ option.label }}</option>
+      }
+    </select>
+  </div>
+  <button class="btn btn--primary search__submit" type="submit" data-testid="search-submit">
+    {{ text.submit }}
+  </button>
+</form>

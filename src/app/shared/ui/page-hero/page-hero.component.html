@@ -1,0 +1,50 @@
+<section class="hero section--night on-night" [class.hero--photo]="image()">
+  <div class="container hero__inner">
+    <div class="hero__text">
+      @if (crumbs().length) {
+        <nav class="crumbs" aria-label="Fil d'Ariane">
+          <ol>
+            <li><a routerLink="/">Accueil</a></li>
+            @for (crumb of crumbs(); track crumb.link) {
+              <li>
+                <a [routerLink]="crumb.link">{{ crumb.label }}</a>
+              </li>
+            }
+          </ol>
+        </nav>
+      }
+      <div class="hero__eyebrow">
+        @if (icon(); as data) {
+          <app-icon
+            [data]="data"
+            [size]="28"
+            [style.view-transition-name]="morph() ? morph() + '-icon' : null"
+          />
+        }
+        <p class="eyebrow">{{ eyebrow() }}</p>
+      </div>
+      <h1 [style.view-transition-name]="morph() ? morph() + '-title' : null">
+        {{ title() }}<span class="cursor" aria-hidden="true"></span>
+      </h1>
+      @if (lead(); as text) {
+        <p class="lead hero__lead">{{ text }}</p>
+      }
+    </div>
+  </div>
+  @if (image(); as picture) {
+    <figure class="hero__media">
+      <img
+        [src]="'/images/photos/' + picture.name + '-' + picture.widths[0] + '.webp'"
+        [attr.srcset]="srcset()"
+        sizes="(min-width: 62rem) 45vw, 100vw"
+        [width]="picture.width"
+        [height]="picture.height"
+        [alt]="picture.alt"
+        fetchpriority="high"
+        decoding="async"
+      />
+    </figure>
+  } @else {
+    <div class="texture-dots" aria-hidden="true"></div>
+  }
+</section>

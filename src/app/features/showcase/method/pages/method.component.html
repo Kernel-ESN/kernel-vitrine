@@ -1,0 +1,35 @@
+<app-page-hero
+  photo="planningSemaines"
+  eyebrow="Méthode"
+  title="Pas de catalogue. On regarde d'abord ce qui se passe chez vous."
+  lead="Cinq étapes, dans cet ordre. Vous pouvez vous arrêter après chacune, et ce qui a été produit reste à vous."
+/>
+
+<section class="section">
+  <div class="container">
+    <ol class="timeline">
+      @for (step of steps; track step.title; let index = $index) {
+        <li class="step" appReveal [id]="'etape-' + (index + 1)">
+          <span class="step__number" aria-hidden="true">0{{ index + 1 }}</span>
+          <div class="step__body">
+            <h2>{{ step.title }}</h2>
+            <p class="lead">{{ step.text }}</p>
+            <p>{{ step.detail }}</p>
+          </div>
+        </li>
+      }
+    </ol>
+  </div>
+</section>
+
+<section id="questions" class="section section--mist" aria-labelledby="faq-title">
+  <div class="container split">
+    <div appReveal>
+      <p class="eyebrow">Questions fréquentes</p>
+      <h2 id="faq-title">Avant de nous appeler</h2>
+    </div>
+    <app-faq [items]="faq" />
+  </div>
+</section>
+
+<app-cta-band title="Commençons par l'étape 1." action="Décrire ma situation" />

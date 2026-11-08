@@ -1,0 +1,7 @@
+<a class="skip-link" href="#contenu" (click)="skipToContent($event, main)">Aller au contenu</a>
+<app-navigation-progress />
+<app-site-header />
+<main #main id="contenu" tabindex="-1">
+  <router-outlet />
+</main>
+<app-site-footer />

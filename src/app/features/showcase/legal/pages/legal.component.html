@@ -1,0 +1,117 @@
+<app-page-hero eyebrow="Informations légales" title="Mentions légales" />
+
+<div class="container legal" appScrollSpy #spy="scrollSpy">
+  <aside class="legal__aside">
+    <p class="legal__updated">Mise à jour le {{ updated }}</p>
+    <app-toc [items]="sections" [active]="spy.active()" />
+  </aside>
+
+  <div class="legal__body">
+    <section id="editeur" data-spy class="block" aria-labelledby="editeur-title">
+      <p class="block__index">01</p>
+      <h2 id="editeur-title">Éditeur du site</h2>
+      <dl class="facts">
+        <div>
+          <dt>Raison sociale</dt>
+          <dd>{{ site.name }}</dd>
+        </div>
+        <div>
+          <dt>Siège</dt>
+          <dd>{{ site.location }}</dd>
+        </div>
+        <div>
+          <dt>Téléphone</dt>
+          <dd>
+            <a [href]="site.phoneHref">{{ site.phoneLabel }}</a>
+          </dd>
+        </div>
+      </dl>
+    </section>
+
+    <section id="hebergement" data-spy class="block" aria-labelledby="hebergement-title">
+      <p class="block__index">02</p>
+      <h2 id="hebergement-title">Hébergement</h2>
+      <p>
+        Le nom et les coordonnées de l'hébergeur seront indiqués ici à la mise en ligne du site.
+      </p>
+    </section>
+
+    <section id="donnees" data-spy class="block" aria-labelledby="donnees-title">
+      <p class="block__index">03</p>
+      <h2 id="donnees-title">Données personnelles</h2>
+      <p>
+        Les informations envoyées par le formulaire de contact servent uniquement à répondre à votre
+        demande. Pour les consulter, les corriger ou les faire supprimer, contactez-nous.
+      </p>
+    </section>
+
+    <section id="contenus" data-spy class="block" aria-labelledby="contenus-title">
+      <p class="block__index">04</p>
+      <h2 id="contenus-title">Contenus et marques</h2>
+      <p>
+        Les textes, le logo et les visuels de ce site appartiennent à {{ site.name }}, sauf les
+        photographies créditées ci-dessous. Les logos des partenaires restent la propriété de leurs
+        titulaires et sont affichés avec leur accord.
+      </p>
+    </section>
+
+    <section id="photos" data-spy class="block" aria-labelledby="photos-title">
+      <p class="block__index">05</p>
+      <h2 id="photos-title">Crédits photographiques</h2>
+      <p>
+        Les photographies sans crédit appartiennent à {{ site.name }}. Les autres sont publiées sous
+        licence Creative Commons ou versées au domaine public. Elles illustrent le pays et le
+        métier, et ne représentent ni nos clients ni notre équipe.
+      </p>
+
+      <table class="credits" data-testid="photo-credits">
+        <caption class="visually-hidden">
+          Auteur, licence et origine de chaque photographie
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col"><span class="visually-hidden">Aperçu</span></th>
+            <th scope="col">Sujet</th>
+            <th scope="col">Auteur</th>
+            <th scope="col">Licence</th>
+            <th scope="col">Origine</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (credit of credits; track credit.name) {
+            <tr data-testid="photo-credit">
+              <td class="credits__thumb">
+                <img
+                  [src]="credit.thumbnail"
+                  alt=""
+                  width="96"
+                  height="64"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </td>
+              <th class="credits__subject" scope="row">{{ credit.subject }}</th>
+              <td data-label="Auteur">{{ credit.author }}</td>
+              <td data-label="Licence">
+                <a
+                  class="credits__license"
+                  [href]="credit.licenseUrl"
+                  target="_blank"
+                  rel="noopener license"
+                  >{{ credit.license }}</a
+                >
+              </td>
+              <td data-label="Origine">
+                <a class="credits__source" [href]="credit.source" target="_blank" rel="noopener">
+                  {{ credit.origin }}
+                  <app-icon [data]="external" [size]="16" />
+                  <span class="visually-hidden">(nouvel onglet)</span>
+                </a>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </section>
+  </div>
+</div>

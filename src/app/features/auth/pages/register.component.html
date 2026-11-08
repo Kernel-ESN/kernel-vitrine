@@ -1,0 +1,72 @@
+<div class="container page">
+  <h1>{{ text.registerTitle }}</h1>
+
+  <form class="form" novalidate appFocusInvalid [formGroup]="form" (ngSubmit)="submit()">
+    <fieldset>
+      <legend>{{ text.profile }}</legend>
+      <label class="choice"
+        ><input type="radio" formControlName="role" value="CANDIDAT" /> {{ text.candidate }}</label
+      >
+      <label class="choice"
+        ><input type="radio" formControlName="role" value="EMPLOYEUR" data-testid="role-employer" />
+        {{ text.employer }}</label
+      >
+    </fieldset>
+    <app-field controlId="reg-name" [label]="text.name" [error]="text.nameError">
+      <input appControl autocomplete="name" formControlName="name" />
+    </app-field>
+    @if (role() === 'EMPLOYEUR') {
+      <app-field
+        controlId="reg-org"
+        [label]="text.orgName"
+        [externalError]="orgMissing ? text.orgNameError : null"
+      >
+        <input appControl autocomplete="organization" formControlName="orgName" />
+      </app-field>
+      <app-field controlId="reg-org-type" [label]="text.orgType">
+        <select appControl formControlName="orgType">
+          @for (option of orgTypes; track option[0]) {
+            <option [value]="option[0]">{{ option[1] }}</option>
+          }
+        </select>
+      </app-field>
+      <app-field
+        controlId="reg-org-phone"
+        [label]="text.orgPhone"
+        [externalError]="phoneProblem ? text.orgPhoneError : null"
+      >
+        <input appControl type="tel" autocomplete="tel" formControlName="orgPhone" />
+      </app-field>
+      <app-field
+        controlId="reg-org-document"
+        [label]="text.orgDocument"
+        [hint]="text.orgDocumentHelp"
+        [externalError]="documentProblem() ? text.orgDocumentErrors[documentProblem()!] : null"
+      >
+        <input
+          appControl
+          type="file"
+          accept=".pdf,.jpg,.jpeg,.png"
+          data-testid="reg-org-document"
+          (change)="pickDocument($event)"
+        />
+      </app-field>
+    }
+    <app-field controlId="reg-email" [label]="text.email" [error]="text.emailError">
+      <input appControl type="email" autocomplete="email" formControlName="email" />
+    </app-field>
+    <app-field controlId="reg-password" [label]="text.password" [error]="text.passwordError">
+      <input appControl type="password" autocomplete="new-password" formControlName="password" />
+    </app-field>
+    @if (error(); as problem) {
+      <p class="form-field__error" role="alert" data-testid="register-error">
+        {{ problem === 'EMAIL_TAKEN' ? text.taken : text.unavailable }}
+      </p>
+    }
+    <button class="btn btn--primary btn--block" type="submit" data-testid="register-submit">
+      {{ text.register }}
+    </button>
+  </form>
+
+  <a routerLink="/connexion" [queryParams]="retour ? { retour } : {}">{{ text.toLogin }}</a>
+</div>

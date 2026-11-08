@@ -1,0 +1,33 @@
+<section class="section" aria-labelledby="partners-title">
+  <div class="container">
+    <div class="section__head" appReveal>
+      <p class="eyebrow">Nos partenaires</p>
+      <h2 id="partners-title">Ceux pour qui nous avons travaillé.</h2>
+    </div>
+    <ul class="partners">
+      @for (partner of partners; track partner.name) {
+        <li class="partner" appReveal>
+          <div class="partner__logo">
+            @if (partner.logo; as logo) {
+              <img
+                [src]="logo.src"
+                [alt]="'Logo ' + partner.name"
+                [width]="logo.width"
+                [height]="logo.height"
+                loading="lazy"
+                decoding="async"
+              />
+            } @else if (partner.wordmark; as mark) {
+              <span class="partner__wordmark" aria-hidden="true">
+                <span class="partner__wordmark-main">{{ mark.main }}</span>
+                <span class="partner__wordmark-sub">{{ mark.sub }}</span>
+              </span>
+            }
+          </div>
+          <h3 class="partner__name">{{ partner.name }}</h3>
+          <p>{{ partner.text }}</p>
+        </li>
+      }
+    </ul>
+  </div>
+</section>

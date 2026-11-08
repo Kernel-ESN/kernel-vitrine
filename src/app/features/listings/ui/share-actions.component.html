@@ -1,0 +1,22 @@
+<div class="share">
+  <a
+    class="btn btn--secondary btn--small"
+    target="_blank"
+    rel="noopener"
+    data-testid="share-whatsapp"
+    [href]="whatsapp()"
+  >
+    <app-icon [data]="icons.whatsapp" [size]="20" />
+    {{ text.shareWhatsapp }}
+  </a>
+  <button
+    class="btn btn--secondary btn--small"
+    type="button"
+    data-testid="copy-link"
+    (click)="copy()"
+  >
+    <app-icon [data]="icons.link" [size]="20" />
+    {{ text.copyLink }}
+  </button>
+  <p class="share__feedback" role="status" data-testid="share-feedback">{{ feedback() }}</p>
+</div>

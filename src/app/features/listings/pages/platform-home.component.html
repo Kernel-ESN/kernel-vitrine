@@ -1,0 +1,113 @@
+<section class="hero section--night on-night">
+  <div class="texture-dots" aria-hidden="true"></div>
+  <div class="container hero__inner">
+    <p class="eyebrow">{{ text.eyebrow }}</p>
+    <h1>{{ text.title }}<span class="cursor" aria-hidden="true"></span></h1>
+    <p class="lead hero__lead">{{ text.lead }}</p>
+    <app-search-box (searched)="search($event)" />
+  </div>
+</section>
+
+<section class="container entries" [attr.aria-label]="text.universesTitle">
+  @for (entry of entries; track entry.id) {
+    <a class="entry" [routerLink]="['/', entry.path]" [attr.data-testid]="'entry-' + entry.path">
+      <app-icon [data]="entry.icon" [size]="32" />
+      <span class="entry__label">{{ entry.label }}</span>
+      <span class="entry__blurb">{{ entry.blurb }}</span>
+      <span class="entry__foot">
+        @if (counts(); as all) {
+          <span class="entry__count">{{ listText.count(all[entry.id]) }}</span>
+        }
+        <app-icon class="entry__arrow" [data]="arrow" [size]="24" />
+      </span>
+    </a>
+  }
+</section>
+
+@if (sectors().length || regions().length) {
+  <section class="container browse" aria-label="Parcourir les annonces" data-testid="browse">
+    <div>
+      <h2>{{ text.bySector }}</h2>
+      <ul class="browse__list">
+        @for (item of sectors(); track item.id) {
+          <li>
+            <a routerLink="/annonces/recherche" [queryParams]="{ secteur: item.id }">
+              <span>{{ item.label }}</span>
+              <span class="browse__count">{{ item.count }}</span>
+            </a>
+          </li>
+        }
+      </ul>
+    </div>
+    <div>
+      <h2>{{ text.byRegion }}</h2>
+      <ul class="browse__list">
+        @for (item of regions(); track item.id) {
+          <li>
+            <a routerLink="/annonces/recherche" [queryParams]="{ region: item.id }">
+              <span>{{ item.label }}</span>
+              <span class="browse__count">{{ item.count }}</span>
+            </a>
+          </li>
+        }
+      </ul>
+    </div>
+  </section>
+}
+
+<div class="container columns">
+  <section aria-labelledby="recent-title">
+    <div class="column__head">
+      <h2 id="recent-title">{{ text.recentTitle }}</h2>
+      <a routerLink="/annonces/recherche">{{ text.seeAll }}</a>
+    </div>
+    @for (listing of recent(); track listing.id) {
+      <app-listing-card [listing]="listing" />
+    }
+  </section>
+  <section aria-labelledby="closing-title">
+    <div class="column__head">
+      <h2 id="closing-title">{{ text.closingTitle }}</h2>
+      <a routerLink="/annonces/recherche" [queryParams]="{ tri: 'expire' }">{{ text.seeAll }}</a>
+    </div>
+    @for (listing of closing(); track listing.id) {
+      <app-listing-card [listing]="listing" />
+    }
+  </section>
+</div>
+
+@if (organizations().length) {
+  <section class="section--mist organizations" aria-labelledby="organizations-title">
+    <div class="container organizations__inner">
+      <div class="column__head">
+        <h2 id="organizations-title">{{ text.organizationsTitle }}</h2>
+        <a routerLink="/organisations" data-testid="all-organizations">{{
+          text.allOrganizations
+        }}</a>
+      </div>
+      <ul class="organizations__grid">
+        @for (item of organizations(); track item.id) {
+          <li>
+            <a class="organization" [routerLink]="['/organisations', item.slug]">
+              <app-org-mark [name]="item.name" />
+              <span class="organization__text">
+                <span class="organization__name">{{ item.name }}</span>
+                <small>{{ organizationText.open(item.openListings) }}</small>
+              </span>
+            </a>
+          </li>
+        }
+      </ul>
+    </div>
+  </section>
+}
+
+<section class="container recruit" aria-labelledby="recruit-title">
+  <div>
+    <h2 id="recruit-title">{{ text.recruitTitle }}</h2>
+    <p>{{ text.recruitLead }}</p>
+  </div>
+  <a class="btn btn--primary" routerLink="/employeur" data-testid="recruit-link">{{
+    text.recruitAction
+  }}</a>
+</section>

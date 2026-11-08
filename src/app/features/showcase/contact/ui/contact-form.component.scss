@@ -1,0 +1,55 @@
+.form,
+.field-group {
+  display: grid;
+  gap: var(--space-6);
+}
+
+// Sur grand écran, les champs courts vont par deux ; le reste occupe toute la largeur.
+@media (min-width: 48rem) {
+  .form,
+  .field-group {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .form > *,
+  .field-group > legend,
+  .field-group > p {
+    grid-column: 1 / -1;
+  }
+
+  .form > .form__half {
+    grid-column: auto;
+  }
+}
+
+.field-group {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.field-group legend {
+  float: left;
+  width: 100%;
+  margin-bottom: var(--space-1);
+  padding: 0;
+  font-weight: 500;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.trap {
+  position: absolute;
+  left: -100vw;
+}
+
+.form__notice {
+  color: var(--color-slate);
+  font-size: var(--text-small);
+}
+
+.form__submit {
+  justify-self: start;
+}

@@ -1,0 +1,136 @@
+.page {
+  display: grid;
+  gap: var(--space-8);
+  padding-block: var(--space-8) var(--space-16);
+}
+
+.page > * {
+  max-width: 60rem;
+}
+
+.head {
+  display: grid;
+  gap: var(--space-2);
+}
+
+h1 {
+  font-size: var(--text-h2);
+}
+
+h2 {
+  margin-bottom: var(--space-3);
+  font-size: var(--text-statement);
+}
+
+.published summary {
+  display: flex;
+  align-items: center;
+  min-height: var(--target-min);
+  color: var(--color-deep);
+  font-size: var(--text-statement);
+  font-weight: 600;
+  cursor: pointer;
+  transition: color var(--transition-hover);
+}
+
+.published summary:hover {
+  color: var(--color-night);
+}
+
+.status {
+  min-height: 1.5em;
+  color: var(--color-deep);
+  font-size: var(--text-small);
+}
+
+.item {
+  display: grid;
+  gap: var(--space-3);
+  padding-block: var(--space-6);
+  border-top: var(--rule);
+  overflow-wrap: anywhere;
+}
+
+.item__type {
+  color: var(--color-deep);
+  font-family: var(--font-mono);
+  font-size: var(--text-eyebrow);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.item__title {
+  font-size: var(--text-h3);
+}
+
+.item__org {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-slate);
+}
+
+.item__description {
+  white-space: pre-line;
+}
+
+.facts {
+  display: grid;
+  margin: 0;
+}
+
+.facts div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+  gap: var(--space-3);
+  padding-block: var(--space-2);
+  border-top: var(--rule);
+}
+
+dt {
+  color: var(--color-slate);
+  font-size: var(--text-small);
+}
+
+dd {
+  margin: 0;
+  font-size: var(--text-small);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-block: var(--space-4);
+  border-top: var(--rule);
+}
+
+.row__head {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.row__meta,
+.empty {
+  color: var(--color-slate);
+  font-size: var(--text-small);
+}
+
+@media (pointer: coarse) {
+  .row__head a,
+  .item > a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target-min);
+  }
+}

@@ -1,0 +1,72 @@
+// Proportions de la charte v2, section 04, exprimées en em du corps du logo.
+// Sous 110 px de large, utiliser le monogramme.
+:host {
+  --logo-name: var(--color-deep);
+  --logo-cursor: var(--color-kernel);
+  --logo-cursor-hover: var(--color-azure);
+  --logo-tagline: var(--color-deep);
+
+  display: inline-block;
+  font-size: var(--logo-size, var(--logo-header));
+}
+
+:host(.logo--night) {
+  --logo-name: var(--color-white);
+  --logo-cursor-hover: var(--color-kernel);
+  --logo-tagline: var(--color-kernel);
+}
+
+.logo {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-family: var(--font-sans);
+  line-height: 1;
+}
+
+.logo__name {
+  display: flex;
+  align-items: baseline;
+  color: var(--logo-name);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.logo__cursor {
+  display: block;
+  width: 0.13em;
+  height: 1.18em;
+  margin-left: 0.07em;
+  border-radius: 0.03em;
+  background: var(--logo-cursor);
+  transform: translateY(0.62em);
+  transition: background var(--transition-hover);
+  // Cadence de la charte : 530 ms allumé, 530 ms éteint, sans fondu.
+  // 4 cycles (4,24 s) puis allumé : WCAG 2.2.2 impose un arrêt avant 5 s.
+  animation: logo-blink 1060ms step-end 4;
+}
+
+@media (hover: hover) {
+  :host(:hover) .logo__cursor {
+    background: var(--logo-cursor-hover);
+  }
+}
+
+.logo__tagline {
+  margin-top: 0.8235em;
+  margin-right: 1.588em;
+  color: var(--logo-tagline);
+  font-size: 0.17em;
+  font-weight: 500;
+  letter-spacing: 0.42em;
+  line-height: 1.2;
+}
+
+@keyframes logo-blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}

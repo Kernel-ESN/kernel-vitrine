@@ -1,0 +1,247 @@
+.band {
+  border-bottom: var(--rule);
+  background: var(--color-mist);
+}
+
+.band__inner {
+  display: grid;
+  gap: var(--space-4);
+  padding-block: var(--space-4) var(--space-6);
+}
+
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-2);
+  color: var(--color-slate);
+  font-size: var(--text-small);
+}
+
+.crumbs li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.crumbs li + li::before {
+  color: var(--color-slate);
+  content: '/';
+}
+
+.crumbs a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target-min);
+}
+
+.top {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.top app-org-mark {
+  order: 1;
+  margin-left: auto;
+}
+
+.top__text {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+h1 {
+  max-width: 28ch;
+  font-size: var(--text-h2);
+  overflow-wrap: anywhere;
+}
+
+.org {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-3);
+  font-size: var(--text-lead);
+}
+
+.top__facts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  color: var(--color-slate);
+  font-size: var(--text-small);
+}
+
+.top__facts li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.top__type {
+  color: var(--color-deep);
+  font-weight: 500;
+}
+
+.top__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+  gap: var(--space-2);
+}
+
+.page {
+  display: grid;
+  gap: var(--space-6);
+  padding-block: var(--space-8) var(--space-16);
+}
+
+.state__title {
+  font-size: var(--text-statement);
+}
+
+.layout {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.main,
+.main section,
+.side {
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.main {
+  gap: var(--space-8);
+}
+
+h2 {
+  font-size: var(--text-h3);
+  font-weight: 600;
+}
+
+.documents a {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 3rem;
+}
+
+.documents small {
+  color: var(--color-slate);
+}
+
+.organization__card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  border: var(--rule);
+  border-radius: var(--radius);
+}
+
+.organization__name {
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.organization__card a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target-min);
+  font-size: var(--text-small);
+}
+
+.apply {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-6);
+  border: 1px solid var(--color-frost);
+  border-top: 1px solid var(--color-deep);
+  border-radius: var(--radius);
+  overflow-wrap: anywhere;
+}
+
+.facts {
+  display: grid;
+  margin: 0;
+}
+
+.facts div {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: var(--space-3);
+  padding-block: var(--space-3);
+  border-top: var(--rule);
+}
+
+dt {
+  color: var(--color-slate);
+  font-size: var(--text-small);
+}
+
+dd {
+  margin: 0;
+  font-size: var(--text-small);
+  font-weight: 500;
+}
+
+.alert-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 2.75rem;
+  font-weight: 500;
+}
+
+.similar {
+  display: grid;
+  gap: var(--space-4);
+  margin-top: var(--space-8);
+}
+
+.similar h2 {
+  font-size: var(--text-statement);
+  font-weight: 500;
+}
+
+// Sur téléphone, l'action principale reste à portée de pouce.
+.apply-bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  padding: var(--space-3) var(--gutter);
+  border-top: var(--rule);
+  background: var(--color-white);
+}
+
+@media (max-width: 30rem) {
+  .top app-org-mark {
+    display: none;
+  }
+}
+
+@media (min-width: 62rem) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr) 24rem;
+    gap: var(--space-16);
+  }
+
+  .side {
+    position: sticky;
+    top: 7.5rem;
+    align-self: start;
+  }
+
+  .apply-bar {
+    display: none;
+  }
+}

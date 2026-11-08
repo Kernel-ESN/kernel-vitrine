@@ -1,0 +1,34 @@
+<article class="card" data-testid="listing-card">
+  <app-org-mark
+    [name]="listing().organization.name"
+    [style.view-transition-name]="morph() === listing().id ? 'listing-mark' : null"
+  />
+  <div class="card__body">
+    <h3
+      class="card__title"
+      [style.view-transition-name]="morph() === listing().id ? 'listing-title' : null"
+    >
+      <a [routerLink]="link()" (click)="morph.set(listing().id)">{{ listing().title }}</a>
+    </h3>
+    <p class="card__org">
+      {{ listing().organization.name }}
+      @if (listing().organization.verified) {
+        <span class="card__verified" [attr.title]="text.verified">
+          <app-icon [data]="icons.verified" [size]="18" />
+          <span class="visually-hidden">{{ text.verified }}</span>
+        </span>
+      }
+    </p>
+    <ul class="card__facts">
+      <li class="card__type">{{ type() }}</li>
+      <li><app-icon [data]="icons.pin" [size]="16" />{{ listing().city }}</li>
+      <li><app-icon [data]="icons.sector" [size]="16" />{{ sector() }}</li>
+    </ul>
+    <p class="card__summary">{{ listing().summary }}</p>
+    <div class="card__foot">
+      <span class="card__published">{{ published() }}</span>
+      <app-deadline-badge [deadline]="listing().deadline" />
+    </div>
+  </div>
+  <app-save-listing class="card__save" [compact]="true" [listing]="listing()" />
+</article>

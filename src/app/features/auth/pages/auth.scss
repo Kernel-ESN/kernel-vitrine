@@ -1,0 +1,73 @@
+.page {
+  display: grid;
+  gap: var(--space-6);
+  padding-block: var(--space-8) var(--space-16);
+}
+
+.page > * {
+  max-width: 34rem;
+}
+
+h1 {
+  font-size: var(--text-h2);
+}
+
+.note,
+.hint {
+  color: var(--color-slate);
+  font-size: var(--text-small);
+}
+
+.form {
+  display: grid;
+  gap: var(--space-4);
+}
+
+fieldset {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+legend {
+  margin-bottom: var(--space-2);
+  padding: 0;
+  font-size: var(--text-small);
+  font-weight: 600;
+}
+
+.choice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 2.75rem;
+}
+
+.choice input {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: var(--color-deep);
+}
+
+.samples {
+  padding: var(--space-4);
+  border-left: 1px solid var(--color-deep);
+  background: var(--color-mist);
+  font-size: var(--text-small);
+  overflow-wrap: anywhere;
+}
+
+.samples strong {
+  display: block;
+}
+
+@media (pointer: coarse) {
+  .page > a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target-min);
+  }
+}

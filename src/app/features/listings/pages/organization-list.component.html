@@ -1,0 +1,62 @@
+<header class="band">
+  <div class="container band__inner">
+    <h1>{{ text.title }}</h1>
+    <p class="lead">{{ text.lead }}</p>
+    <div class="form-field filter">
+      <label for="organization-filter">{{ text.filterLabel }}</label>
+      <input
+        id="organization-filter"
+        class="control"
+        type="search"
+        data-testid="organization-filter"
+        (input)="filter.set($any($event.target).value)"
+      />
+    </div>
+  </div>
+</header>
+
+<div class="container page">
+  @switch (directory().status) {
+    @case ('error') {
+      <div class="state" role="alert" data-testid="organizations-error">
+        <h2 class="state__title">{{ text.errorTitle }}</h2>
+      </div>
+    }
+    @case ('ready') {
+      <ul class="grid" aria-live="polite">
+        @for (item of shown(); track item.id) {
+          <li class="tile" data-testid="organization-tile">
+            <app-org-mark
+              [name]="item.name"
+              [style.view-transition-name]="morph() === item.id ? 'organization-mark' : null"
+            />
+            <div class="tile__text">
+              <a
+                class="tile__name"
+                [routerLink]="['/organisations', item.slug]"
+                [style.view-transition-name]="morph() === item.id ? 'organization-name' : null"
+                (click)="morph.set(item.id)"
+                >{{ item.name }}</a
+              >
+              <p class="tile__type">
+                {{ typeLabel(item) }}
+                @if (item.verified) {
+                  <span class="tile__verified" [attr.title]="text.verified">
+                    <app-icon [data]="verified" [size]="18" />
+                    <span class="visually-hidden">{{ text.verified }}</span>
+                  </span>
+                }
+              </p>
+              <p class="tile__count">{{ text.open(item.openListings) }}</p>
+            </div>
+          </li>
+        }
+      </ul>
+      @if (!shown().length) {
+        <p class="empty" data-testid="organizations-empty">
+          {{ filter() ? text.empty : text.none }}
+        </p>
+      }
+    }
+  }
+</div>

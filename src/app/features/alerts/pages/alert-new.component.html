@@ -1,0 +1,46 @@
+<div class="container page">
+  <header class="head">
+    <p class="eyebrow">{{ text.newEyebrow }}</p>
+    <h1>{{ text.newTitle }}</h1>
+  </header>
+
+  <form class="form" novalidate appFocusInvalid [formGroup]="form" (ngSubmit)="submit()">
+    <dl class="criteria">
+      <dt>{{ text.criteria }}</dt>
+      <dd data-testid="alert-criteria">{{ summary }}</dd>
+    </dl>
+
+    <app-field controlId="alert-email" [label]="text.email" [hint]="text.privacy">
+      <input appControl type="email" readonly [value]="email" />
+    </app-field>
+
+    <fieldset>
+      <legend>{{ text.channel }}</legend>
+      <label class="choice"
+        ><input type="radio" name="channel" checked /> {{ text.channelEmail }}</label
+      >
+      <label class="choice choice--off"
+        ><input type="radio" name="channel" disabled /> {{ text.channelWhatsapp }}</label
+      >
+    </fieldset>
+
+    <fieldset>
+      <legend>{{ text.frequency }}</legend>
+      @for (option of frequencies; track option[0]) {
+        <label class="choice"
+          ><input type="radio" formControlName="frequency" [value]="option[0]" />
+          {{ option[1] }}</label
+        >
+      }
+    </fieldset>
+
+    @if (failed()) {
+      <p class="form-field__error" role="alert">{{ text.saveError }}</p>
+    }
+
+    <button class="btn btn--primary" type="submit" data-testid="alert-submit">
+      <app-icon [data]="icon" [size]="20" />
+      {{ text.submit }}
+    </button>
+  </form>
+</div>

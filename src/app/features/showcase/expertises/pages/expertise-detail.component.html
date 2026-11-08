@@ -1,0 +1,86 @@
+<app-page-hero
+  [morph]="'service-' + slug()"
+  [photo]="photo()"
+  [eyebrow]="nav().label"
+  [title]="content().headline"
+  [lead]="content().intro"
+  [icon]="nav().icon"
+  [crumbs]="crumbs"
+/>
+
+<section class="section" aria-labelledby="services-title">
+  <div class="container">
+    <div class="section__head" appReveal>
+      <p class="eyebrow">Concrètement</p>
+      <h2 id="services-title">Ce que nous faisons</h2>
+    </div>
+    <ol class="services">
+      @for (service of content().services; track service.title; let index = $index) {
+        <li class="service" appReveal>
+          <span class="service__number" aria-hidden="true">0{{ index + 1 }}</span>
+          <h3>{{ service.title }}</h3>
+          <p>{{ service.text }}</p>
+        </li>
+      }
+    </ol>
+  </div>
+</section>
+
+<section class="section section--deep on-night" aria-labelledby="deliverables-title">
+  <div class="container split">
+    <div appReveal>
+      <p class="eyebrow">À la fin</p>
+      <h2 id="deliverables-title">Ce qui reste chez vous</h2>
+    </div>
+    <ul class="deliverables">
+      @for (item of content().deliverables; track item) {
+        <li appReveal>
+          <app-icon [data]="check" [size]="24" />
+          <span>{{ item }}</span>
+        </li>
+      }
+    </ul>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="faq-title">
+  <div class="container split">
+    <div appReveal>
+      <p class="eyebrow">Questions fréquentes</p>
+      <h2 id="faq-title">Ce que vous vous demandez sûrement</h2>
+    </div>
+    <app-faq [items]="content().faq" />
+  </div>
+</section>
+
+@if (content().tools.length) {
+  <section class="section section--mist tools" aria-labelledby="tools-title">
+    <div class="container">
+      <h2 id="tools-title" class="eyebrow tools__title">Outils que nous utilisons souvent</h2>
+      <ul class="tools__list">
+        @for (tool of content().tools; track tool) {
+          <li>{{ tool }}</li>
+        }
+      </ul>
+    </div>
+  </section>
+}
+
+<app-cta-band title="Un besoin à chiffrer ?" action="Demander un devis" [quoteFor]="slug()" />
+
+<section class="section" aria-labelledby="others-title">
+  <div class="container">
+    <h2 id="others-title" class="others__title">Les autres métiers</h2>
+    <ul class="others">
+      @for (other of others(); track other.key) {
+        <li>
+          <a [routerLink]="['/services', other.slug]">
+            <app-icon [data]="other.icon" [size]="32" />
+            <strong>{{ other.label }}</strong>
+            <span>{{ other.blurb }}</span>
+          </a>
+        </li>
+      }
+    </ul>
+  </div>
+</section>

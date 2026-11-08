@@ -1,0 +1,35 @@
+<app-page-hero
+  photo="femmeOrdinateur"
+  eyebrow="Services"
+  title="Quatre métiers, à la même table."
+  lead="La plupart des problèmes informatiques ne s'arrêtent pas à une seule spécialité. Quand une application est lente ou qu'un chiffre semble faux, il faut pouvoir regarder le code, la base, le serveur et les accès en même temps."
+/>
+
+<section class="section">
+  <div class="container">
+    <ul class="list">
+      @for (item of items; track item.nav.key; let index = $index) {
+        <li appReveal>
+          <a class="row" [routerLink]="['/services', item.nav.slug]">
+            <span class="row__label">
+              <app-icon
+                [style.view-transition-name]="'service-' + item.nav.slug + '-icon'"
+                [data]="item.nav.icon"
+                [size]="32"
+              />
+              <strong>{{ item.nav.label }}</strong>
+            </span>
+            <span
+              class="statement"
+              [style.view-transition-name]="'service-' + item.nav.slug + '-title'"
+              >{{ item.content.headline }}</span
+            >
+            <app-icon class="row__arrow" [data]="arrow" [size]="28" />
+          </a>
+        </li>
+      }
+    </ul>
+  </div>
+</section>
+
+<app-cta-band />

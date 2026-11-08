@@ -1,0 +1,192 @@
+<div class="container page">
+  <header class="head">
+    <p class="eyebrow">{{ text.eyebrow }}</p>
+    <h1>{{ text.title }}</h1>
+    <p class="status" role="status" data-testid="moderation-status">{{ status() }}</p>
+    @if (actionFailed()) {
+      <p class="form-field__error" role="alert" data-testid="moderation-failed">
+        {{ text.failed }}
+      </p>
+    }
+  </header>
+
+  @if (loadFailed()) {
+    <div class="state" role="alert" data-testid="moderation-load-failed">
+      <h2>{{ text.loadFailed }}</h2>
+      <button class="btn btn--primary btn--small" type="button" (click)="refresh()">
+        {{ text.retry }}
+      </button>
+    </div>
+  } @else {
+    <section aria-labelledby="pending-title">
+      <h2 id="pending-title">{{ text.pendingTitle(pending().length) }}</h2>
+      @for (item of pending(); track item.id) {
+        <article class="item" data-testid="pending-item">
+          <p class="item__type">{{ types[item.type] }}</p>
+          <h3 class="item__title">{{ item.title }}</h3>
+          <p class="item__org">
+            {{ item.organization.name }}
+            <span
+              class="badge"
+              [class.badge--urgent]="item.organization.verification !== 'VERIFIEE'"
+            >
+              {{
+                item.organization.verification === 'VERIFIEE'
+                  ? text.organizationVerified
+                  : text.organizationNotVerified
+              }}
+            </span>
+          </p>
+          <p>{{ item.summary }}</p>
+          <p class="item__description">{{ item.description }}</p>
+          <dl class="facts">
+            @if (item.submittedBy; as email) {
+              <div>
+                <dt>{{ text.submittedBy }}</dt>
+                <dd>{{ email }}</dd>
+              </div>
+            }
+            <div>
+              <dt>{{ text.place }}</dt>
+              <dd>{{ place(item) }}</dd>
+            </div>
+            <div>
+              <dt>{{ text.sector }}</dt>
+              <dd>{{ sector(item) }}</dd>
+            </div>
+            <div>
+              <dt>{{ text.deadline }}</dt>
+              <dd>{{ day(item.deadline) }}</dd>
+            </div>
+            @if (item.budget; as budget) {
+              <div>
+                <dt>{{ text.budget }}</dt>
+                <dd>{{ money(budget) }}</dd>
+              </div>
+            }
+            <div>
+              <dt>{{ text.answer }}</dt>
+              <dd>{{ item.instructions }} {{ item.applyEmail }} {{ item.applyUrl }}</dd>
+            </div>
+          </dl>
+          @if (isRefusing('reject', item.id)) {
+            <app-reason-form
+              [controlId]="'reason-' + item.id"
+              (confirmed)="confirmRefusal($event)"
+              (cancelled)="refusal.set(null)"
+            />
+          } @else {
+            <div class="actions">
+              <button
+                class="btn btn--primary btn--small"
+                type="button"
+                data-testid="publish"
+                (click)="publish(item.id)"
+              >
+                {{ text.publish }}
+              </button>
+              <button
+                class="btn btn--secondary btn--small"
+                type="button"
+                data-testid="reject"
+                (click)="refusal.set({ kind: 'reject', id: item.id })"
+              >
+                {{ text.reject }}
+              </button>
+            </div>
+          }
+        </article>
+      } @empty {
+        <p class="empty" data-testid="pending-empty">{{ text.pendingEmpty }}</p>
+      }
+    </section>
+
+    <section aria-labelledby="organizations-title">
+      <h2 id="organizations-title">{{ text.organizationsTitle(organizations().length) }}</h2>
+      @for (organization of organizations(); track organization.id) {
+        <article class="item" data-testid="organization-item">
+          <h3 class="item__title">{{ organization.name }}</h3>
+          @if (contact(organization); as line) {
+            <p class="item__org">{{ text.contact }} : {{ line }}</p>
+          }
+          @if (documentUrl(organization); as url) {
+            <a [href]="url" download data-testid="organization-document">
+              {{ text.document }} ({{ organization.documentName }})
+            </a>
+          } @else {
+            <p class="empty">{{ text.noDocument }}</p>
+          }
+          @if (isRefusing('organization', organization.id)) {
+            <app-reason-form
+              [controlId]="'reason-' + organization.id"
+              (confirmed)="confirmRefusal($event)"
+              (cancelled)="refusal.set(null)"
+            />
+          } @else {
+            <div class="actions">
+              <button
+                class="btn btn--primary btn--small"
+                type="button"
+                data-testid="verify"
+                (click)="verify(organization.id)"
+              >
+                {{ text.verify }}
+              </button>
+              <button
+                class="btn btn--secondary btn--small"
+                type="button"
+                data-testid="reject-organization"
+                (click)="refusal.set({ kind: 'organization', id: organization.id })"
+              >
+                {{ text.reject }}
+              </button>
+            </div>
+          }
+        </article>
+      } @empty {
+        <p class="empty" data-testid="organizations-empty">{{ text.organizationsEmpty }}</p>
+      }
+    </section>
+
+    <details class="published" data-testid="published">
+      <summary>{{ text.publishedTitle(published().length) }}</summary>
+      @for (item of published(); track item.id) {
+        <article class="row" data-testid="published-item">
+          <div class="row__head">
+            <a
+              [routerLink]="[
+                '/',
+                item.universe === 'EMPLOI'
+                  ? 'emplois'
+                  : item.universe === 'MARCHE'
+                    ? 'marches'
+                    : 'autres',
+                item.slug,
+              ]"
+              >{{ item.title }}</a
+            >
+            <span class="row__meta">{{ item.organization.name }}</span>
+          </div>
+          @if (isRefusing('withdraw', item.id)) {
+            <app-reason-form
+              [controlId]="'reason-' + item.id"
+              (confirmed)="confirmRefusal($event)"
+              (cancelled)="refusal.set(null)"
+            />
+          } @else {
+            <button
+              class="btn btn--secondary btn--small"
+              type="button"
+              data-testid="withdraw"
+              (click)="refusal.set({ kind: 'withdraw', id: item.id })"
+            >
+              {{ text.withdraw }}
+            </button>
+          }
+        </article>
+      } @empty {
+        <p class="empty">{{ text.publishedEmpty }}</p>
+      }
+    </details>
+  }
+</div>

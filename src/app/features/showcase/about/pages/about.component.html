@@ -1,0 +1,130 @@
+<app-page-hero
+  eyebrow="À propos"
+  title="Une société d'ingénierie née au Niger."
+  lead="Kernel Consulting a été fondée par Ahmed Abdoulahi et Saratou Anaroua Fodi. Nous travaillons pour des ministères, des ONG et des particuliers au Niger, et à distance pour des clients dans d'autres pays."
+/>
+
+<section class="section" aria-labelledby="name-title">
+  <div class="container split">
+    <div appReveal>
+      <p class="eyebrow">Le nom</p>
+      <h2 id="name-title">Pourquoi Kernel</h2>
+    </div>
+    <p class="statement" appReveal>
+      Le kernel, c'est le noyau d'un système d'exploitation. Personne ne le voit, et c'est lui qui
+      fait tourner tout le reste. Nous n'avons pas trouvé meilleure description de notre travail.
+    </p>
+  </div>
+</section>
+
+<section class="section section--mist" aria-labelledby="team-title">
+  <div class="container">
+    <div class="section__head" appReveal>
+      <p class="eyebrow">Les fondateurs</p>
+      <h2 id="team-title">Deux métiers qui se parlent.</h2>
+    </div>
+    <div class="founders">
+      @for (founder of founders; track founder.name) {
+        <article class="founder" appReveal>
+          <img
+            class="founder__photo"
+            [src]="founder.photo"
+            [alt]="founder.name"
+            width="352"
+            height="352"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="founder__body">
+            <h3 class="founder__name">{{ founder.name }}</h3>
+            <p class="founder__role">{{ founder.role }}</p>
+            @for (paragraph of founder.bio; track paragraph) {
+              <p>{{ paragraph }}</p>
+            }
+            @if (founder.skills.length) {
+              <ul class="founder__skills" [attr.aria-label]="'Compétences de ' + founder.name">
+                @for (skill of founder.skills; track skill) {
+                  <li>{{ skill }}</li>
+                }
+              </ul>
+            }
+          </div>
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="collaborators-title">
+  <div class="container">
+    <div class="section__head" appReveal>
+      <p class="eyebrow">Les collaborateurs</p>
+      <h2 id="collaborators-title">Un spécialiste pour chaque sujet.</h2>
+      <p class="lead">
+        Les fondateurs ne couvrent pas tout seuls chaque métier. Selon le projet, des collaborateurs
+        de Kernel rejoignent la mission dans leur domaine.
+      </p>
+    </div>
+    <ul class="collaborators">
+      @for (domain of collaborators; track domain.title) {
+        <li appReveal>
+          <h3>{{ domain.title }}</h3>
+          <p>{{ domain.text }}</p>
+        </li>
+      }
+    </ul>
+  </div>
+</section>
+
+<section class="section section--mist" aria-labelledby="record-title">
+  <div class="container">
+    <div class="section__head" appReveal>
+      <p class="eyebrow">Avant Kernel</p>
+      <h2 id="record-title">Ce que ses fondateurs ont déjà construit.</h2>
+    </div>
+    <ul class="record">
+      @for (item of record; track item.figure) {
+        <li class="record__item" appReveal>
+          <p class="record__figure">{{ item.figure }}</p>
+          <p>{{ item.text }}</p>
+        </li>
+      }
+    </ul>
+  </div>
+</section>
+
+<app-partners />
+
+<section class="section section--deep on-night" aria-labelledby="commitments-title">
+  <div class="container">
+    <div class="section__head" appReveal>
+      <p class="eyebrow">Nos règles</p>
+      <h2 id="commitments-title">Ce que nous nous interdisons, et ce que nous nous imposons.</h2>
+    </div>
+    <ul class="commitments">
+      @for (item of commitments; track item.title) {
+        <li appReveal>
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.text }}</p>
+        </li>
+      }
+    </ul>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="where-title">
+  <div class="container split">
+    <div appReveal>
+      <p class="eyebrow">Où nous trouver</p>
+      <h2 id="where-title">À Niamey, et au bout du fil.</h2>
+    </div>
+    <address class="where" appReveal>
+      <span class="where__row"><app-icon [data]="icons.pin" [size]="28" />{{ site.location }}</span>
+      <a class="where__row" [href]="site.phoneHref"
+        ><app-icon [data]="icons.phone" [size]="28" />{{ site.phoneLabel }}</a
+      >
+    </address>
+  </div>
+</section>
+
+<app-cta-band />

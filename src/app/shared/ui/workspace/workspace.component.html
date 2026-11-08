@@ -1,0 +1,35 @@
+<header class="band">
+  <div class="container band__inner">
+    <div class="identity">
+      @if (initials(); as letters) {
+        <span class="identity__mark" aria-hidden="true">{{ letters }}</span>
+      }
+      <p class="eyebrow">{{ eyebrow() }}</p>
+      <h1 [attr.data-testid]="headingTestId() ?? null">{{ heading() }}</h1>
+      @if (subtitle(); as text) {
+        <p class="identity__subtitle">{{ text }}</p>
+      }
+      <ng-content select="[workspaceStatus]" />
+    </div>
+    <div class="band__actions">
+      <ng-content select="[workspaceActions]" />
+    </div>
+  </div>
+</header>
+
+<div
+  class="container layout"
+  [class.layout--single]="!sections().length"
+  appScrollSpy
+  #spy="scrollSpy"
+>
+  @if (sections().length) {
+    <aside class="layout__aside">
+      <app-toc [label]="tocLabel()" [items]="sections()" [active]="spy.active()" />
+      <ng-content select="[workspaceAside]" />
+    </aside>
+  }
+  <div class="layout__body">
+    <ng-content />
+  </div>
+</div>

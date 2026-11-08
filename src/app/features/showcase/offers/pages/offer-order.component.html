@@ -1,0 +1,203 @@
+<app-page-hero
+  [eyebrow]="text.eyebrow"
+  [title]="text.orderTitle(offer().nav.label)"
+  [lead]="text.orderLead"
+  [crumbs]="crumbs()"
+/>
+
+<div class="container page">
+  <div class="layout">
+    <div>
+      @if (store.status() === 'sent') {
+        <div #confirmation class="notice notice--success" tabindex="-1" data-testid="order-sent">
+          <app-icon class="notice__icon" [data]="icons.check" [size]="32" />
+          <h2>{{ text.sentTitle }}</h2>
+          <p>{{ text.sentText }}</p>
+        </div>
+      } @else {
+        @if (!store.available) {
+          <p class="notice notice--error" data-testid="order-unavailable">
+            <app-icon class="notice__inline" [data]="icons.alert" [size]="24" />
+            {{ text.unavailable }} <a [href]="site.phoneHref">{{ site.phoneLabel }}</a
+            >.
+          </p>
+        }
+        @if (store.status() === 'error') {
+          <p class="notice notice--error" role="alert" data-testid="order-error">
+            <app-icon class="notice__inline" [data]="icons.alert" [size]="24" />
+            {{ text.failed }} <a [href]="site.phoneHref">{{ site.phoneLabel }}</a
+            >.
+          </p>
+        }
+
+        <form class="form" novalidate appFocusInvalid [formGroup]="form" (ngSubmit)="submit()">
+          <app-field controlId="order-name" label="Nom" error="Indiquez votre nom.">
+            <input appControl type="text" formControlName="name" autocomplete="name" required />
+          </app-field>
+          <app-field controlId="order-organization" label="Organisation" note="facultatif">
+            <input
+              appControl
+              type="text"
+              formControlName="organization"
+              autocomplete="organization"
+            />
+          </app-field>
+          <app-field
+            controlId="order-audience"
+            label="Vous êtes"
+            error="Choisissez ce qui vous correspond."
+          >
+            <select appControl formControlName="audience" required>
+              <option value="" disabled>Choisissez</option>
+              @for (audience of audiences; track audience.slug) {
+                <option [value]="audience.slug">{{ audience.label }}</option>
+              }
+            </select>
+          </app-field>
+
+          <fieldset class="group">
+            <legend>
+              Comment vous répondre <span class="form-field__hint">(au moins un des deux)</span>
+            </legend>
+            <app-field
+              controlId="order-email"
+              label="E-mail"
+              error="Cette adresse e-mail n'est pas valide."
+              describedBy="order-contact-error"
+              [markInvalid]="contactMissing()"
+            >
+              <input appControl type="email" formControlName="email" autocomplete="email" />
+            </app-field>
+            <app-field
+              controlId="order-phone"
+              label="Téléphone ou WhatsApp"
+              error="Ce numéro n'est pas valide. Exemple : +227 90 00 00 00."
+              describedBy="order-contact-error"
+              [markInvalid]="contactMissing()"
+            >
+              <input appControl type="tel" formControlName="phone" autocomplete="tel" />
+            </app-field>
+            @if (contactMissing()) {
+              <p id="order-contact-error" class="form-field__error">
+                Indiquez un e-mail ou un téléphone.
+              </p>
+            }
+          </fieldset>
+
+          @if (offer().content.asksDomain) {
+            <fieldset class="group" data-testid="order-domain">
+              <legend>{{ text.domainLegend }}</legend>
+              <div class="domain">
+                <app-field
+                  controlId="order-domain"
+                  [label]="text.domainLabel"
+                  [hint]="text.domainHint"
+                  [error]="text.domainError"
+                >
+                  <input appControl type="text" formControlName="domain" autocomplete="off" />
+                </app-field>
+                <app-field controlId="order-extension" [label]="text.extensionLabel">
+                  <select appControl formControlName="extension">
+                    @for (extension of extensions; track extension) {
+                      <option [value]="extension">{{ extension }}</option>
+                    }
+                    <option value="">{{ text.extensionUnknown }}</option>
+                  </select>
+                </app-field>
+              </div>
+              <app-field
+                controlId="order-mailboxes"
+                [label]="text.mailboxesLabel"
+                note="facultatif"
+                [error]="text.mailboxesError"
+              >
+                <input
+                  appControl
+                  type="number"
+                  min="0"
+                  max="200"
+                  inputmode="numeric"
+                  formControlName="mailboxes"
+                />
+              </app-field>
+            </fieldset>
+          }
+
+          @if (offer().content.options.length) {
+            <fieldset class="group" formArrayName="options">
+              <legend>
+                {{ text.optionsLegend }} <span class="form-field__hint">(facultatif)</span>
+              </legend>
+              @for (control of optionControls; track $index) {
+                <label class="check">
+                  <input
+                    type="checkbox"
+                    [formControlName]="$index"
+                    [attr.data-testid]="'order-option-' + $index"
+                  />
+                  <span>{{ offer().content.options[$index] }}</span>
+                </label>
+              }
+            </fieldset>
+          }
+
+          <app-field
+            controlId="order-message"
+            [label]="text.messageLabel"
+            note="facultatif"
+            [error]="text.messageError"
+          >
+            <textarea appControl rows="4" formControlName="message"></textarea>
+          </app-field>
+
+          <div class="trap" aria-hidden="true">
+            <label for="order-website">Ne pas remplir</label>
+            <input
+              id="order-website"
+              type="text"
+              formControlName="website"
+              tabindex="-1"
+              autocomplete="off"
+            />
+          </div>
+
+          <button
+            class="btn btn--primary form__submit"
+            type="submit"
+            data-testid="order-submit"
+            [disabled]="store.status() === 'sending' || !store.available"
+          >
+            {{ store.status() === 'sending' ? text.sending : text.submit }}
+            <app-icon [data]="icons.send" [size]="20" />
+          </button>
+        </form>
+      }
+    </div>
+
+    <aside class="summary" aria-labelledby="summary-title">
+      <h2 id="summary-title" class="summary__title">{{ text.orderSummary }}</h2>
+      <p class="summary__label">
+        <app-icon [data]="offer().nav.icon" [size]="24" />
+        {{ offer().nav.label }}
+      </p>
+      <p class="summary__billing">{{ billing[offer().content.billing] }}</p>
+      @if (subscribed(offer().content.price)) {
+        <app-period-toggle />
+      }
+      <ul class="summary__list">
+        @for (item of offer().content.includes; track item) {
+          <li>{{ item }}</li>
+        }
+      </ul>
+      <p class="summary__price">{{ price(offer().content.price, period()) }}</p>
+      @if (priceAfter(offer().content.price, period()); as next) {
+        <p class="summary__then">{{ next }}</p>
+      }
+      @if (saving(offer().content.price, period()); as gift) {
+        <p class="summary__then">{{ gift }}</p>
+      }
+      <p class="summary__help">{{ text.priceHelp }}</p>
+      <a [routerLink]="['/offres', offer().nav.slug]">{{ text.back }}</a>
+    </aside>
+  </div>
+</div>

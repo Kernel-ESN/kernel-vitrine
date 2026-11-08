@@ -1,0 +1,170 @@
+<app-page-hero
+  photo="professionnelBureau"
+  [eyebrow]="text.eyebrow"
+  [title]="text.title"
+  [lead]="text.lead"
+/>
+
+<section class="section" aria-labelledby="catalog-title">
+  <div class="container catalog">
+    <h2 id="catalog-title" class="visually-hidden">{{ text.eyebrow }}</h2>
+    <div class="filters" role="group" [attr.aria-label]="text.filterLabel">
+      <button
+        class="filter"
+        type="button"
+        data-testid="offer-filter-all"
+        [attr.aria-pressed]="category() === null"
+        (click)="category.set(null)"
+      >
+        {{ text.all }}
+      </button>
+      @for (item of categories; track item.id) {
+        <button
+          class="filter"
+          type="button"
+          [attr.data-testid]="'offer-filter-' + item.id"
+          [attr.aria-pressed]="category() === item.id"
+          (click)="category.set(item.id)"
+        >
+          {{ item.label }}
+        </button>
+      }
+    </div>
+
+    <div class="catalog__period">
+      <p class="catalog__period-label">Abonnements :</p>
+      <app-period-toggle />
+    </div>
+
+    <ul class="grid" aria-live="polite">
+      @for (offer of shown(); track offer.nav.slug) {
+        <li class="card" data-testid="offer-card">
+          <app-icon
+            class="card__icon"
+            [data]="offer.nav.icon"
+            [size]="32"
+            [style.view-transition-name]="'offer-' + offer.nav.slug + '-icon'"
+          />
+          <p class="card__category">{{ categoryLabel(offer.nav.category) }}</p>
+          <h3 class="card__title">
+            <a [routerLink]="['/offres', offer.nav.slug]">{{ offer.nav.label }}</a>
+          </h3>
+          <p class="card__headline">{{ offer.content.headline }}</p>
+          <p class="card__audience">{{ offer.content.audience }}</p>
+          <p class="card__price" data-testid="offer-card-price">
+            {{ price(offer.content.price, period()) }}
+            @if (priceAfter(offer.content.price, period()); as next) {
+              <span class="card__then">{{ next }}</span>
+            }
+            @if (saving(offer.content.price, period()); as gift) {
+              <span class="card__saving">{{ gift }}</span>
+            }
+          </p>
+          <div class="card__foot">
+            <span class="card__billing">{{ billing[offer.content.billing] }}</span>
+            <app-icon class="card__arrow" [data]="arrow" [size]="24" />
+          </div>
+        </li>
+      }
+    </ul>
+  </div>
+</section>
+
+<section class="section section--mist" aria-labelledby="compare-title">
+  <div class="container">
+    <div class="section__head" appReveal>
+      <p class="eyebrow">Comparer</p>
+      <h2 id="compare-title">Trois sites, trois usages.</h2>
+    </div>
+    <div class="compare__period">
+      <app-period-toggle />
+    </div>
+    <div class="compare" role="region" aria-labelledby="compare-title" tabindex="0">
+      <table data-testid="offer-comparison">
+        <thead>
+          <tr>
+            <td></td>
+            @for (offer of compared; track offer.nav.slug) {
+              <th scope="col">
+                <span class="compare__name">{{ offer.nav.label }}</span>
+                <span class="compare__price">{{ price(offer.content.price, period()) }}</span>
+                @if (priceAfter(offer.content.price, period()); as next) {
+                  <span class="compare__then">{{ next }}</span>
+                }
+                @if (saving(offer.content.price, period()); as gift) {
+                  <span class="compare__saving">{{ gift }}</span>
+                }
+              </th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of comparison.rows; track row.label) {
+            <tr>
+              <th scope="row">{{ row.label }}</th>
+              @for (value of row.values; track $index) {
+                <td>
+                  @if (isText(value)) {
+                    {{ value }}
+                  } @else if (value) {
+                    <app-icon class="compare__yes" [data]="marks.yes" [size]="20" />
+                    <span class="visually-hidden">Inclus</span>
+                  } @else {
+                    <app-icon class="compare__no" [data]="marks.no" [size]="20" />
+                    <span class="visually-hidden">Non inclus</span>
+                  }
+                </td>
+              }
+            </tr>
+          }
+        </tbody>
+        <tfoot>
+          <tr>
+            <td></td>
+            @for (offer of compared; track offer.nav.slug) {
+              <td>
+                <a
+                  class="btn btn--primary btn--small"
+                  [routerLink]="['/offres', offer.nav.slug, 'commander']"
+                >
+                  {{ text.order }}
+                </a>
+              </td>
+            }
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="included-title">
+  <div class="container">
+    <div class="section__head" appReveal>
+      <h2 id="included-title">{{ text.includedTitle }}</h2>
+    </div>
+    <ul class="included">
+      @for (item of included; track item.title) {
+        <li appReveal>
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.text }}</p>
+        </li>
+      }
+    </ul>
+  </div>
+</section>
+
+<section class="section section--mist" aria-labelledby="bespoke-title">
+  <div class="container bespoke">
+    <div>
+      <h2 id="bespoke-title">{{ text.bespoke }}</h2>
+      <p class="lead">{{ text.bespokeLead }}</p>
+    </div>
+    <a class="btn btn--secondary" routerLink="/services">
+      {{ text.bespokeAction }}
+      <app-icon [data]="arrow" [size]="20" />
+    </a>
+  </div>
+</section>
+
+<app-cta-band title="Une question avant de commander ?" action="Écrire à un ingénieur" />

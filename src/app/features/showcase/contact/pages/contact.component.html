@@ -1,0 +1,78 @@
+<app-page-hero
+  photo="reunionTravail"
+  eyebrow="Contact"
+  [title]="isQuote() ? 'Demander un devis.' : 'Dites-nous ce qui bloque.'"
+  [lead]="
+    isQuote()
+      ? 'Décrivez ce qu\'il faut faire, avec vos mots. Nous vous recontacterons pour préciser le besoin avant de chiffrer.'
+      : 'Avec vos mots, sans vocabulaire technique. Nous vous recontacterons pour convenir d\'un premier échange.'
+  "
+/>
+
+<div class="container page">
+  <div class="layout">
+    <div class="panel">
+      @if (store.status() === 'sent') {
+        <div #confirmation class="notice notice--success" tabindex="-1" data-testid="confirmation">
+          <app-icon class="notice__icon" [data]="icons.check" [size]="32" />
+          <h2>
+            {{
+              sentSubject() === 'devis'
+                ? 'Votre demande de devis est envoyée'
+                : 'Votre message est envoyé'
+            }}
+          </h2>
+          <p>Nous vous recontacterons aux coordonnées que vous avez indiquées.</p>
+        </div>
+      } @else {
+        @if (!store.available) {
+          <p class="notice notice--error" data-testid="unavailable">
+            <app-icon class="notice__inline" [data]="icons.alert" [size]="24" />
+            L'envoi en ligne n'est pas encore actif. Pour nous joindre, appelez le
+            <a [href]="site.phoneHref">{{ site.phoneLabel }}</a
+            >.
+          </p>
+        }
+        @if (store.status() === 'error') {
+          <p class="notice notice--error" role="alert" data-testid="send-error">
+            <app-icon class="notice__inline" [data]="icons.alert" [size]="24" />
+            Le message n'a pas pu être envoyé. Réessayez, ou appelez le
+            <a [href]="site.phoneHref">{{ site.phoneLabel }}</a
+            >.
+          </p>
+        }
+        <app-contact-form
+          [audiences]="audiences"
+          [initialAudience]="public()"
+          [initialSubject]="objet()"
+          [initialService]="service()"
+          [sending]="store.status() === 'sending'"
+          [disabled]="!store.available"
+          (submitted)="onSubmitted($event)"
+        />
+      }
+    </div>
+
+    <aside class="details" aria-labelledby="details-title">
+      <section class="details__block">
+        <h2 id="details-title" class="details__title">Vous préférez parler ?</h2>
+        <address>
+          <a class="details__row details__phone" [href]="site.phoneHref"
+            ><app-icon [data]="icons.phone" [size]="24" />{{ site.phoneLabel }}</a
+          >
+          <span class="details__row"
+            ><app-icon [data]="icons.pin" [size]="24" />{{ site.location }}</span
+          >
+        </address>
+      </section>
+      <section class="details__block" aria-labelledby="next-title">
+        <h2 id="next-title" class="details__title">Ensuite</h2>
+        <ol class="next">
+          <li>Nous lisons votre message.</li>
+          <li>Nous vous rappelons pour préciser le besoin.</li>
+          <li>Vous recevez une proposition écrite, avec son prix, avant tout engagement.</li>
+        </ol>
+      </section>
+    </aside>
+  </div>
+</div>

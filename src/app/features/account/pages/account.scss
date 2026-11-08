@@ -1,0 +1,158 @@
+.page {
+  display: grid;
+  gap: var(--space-8);
+  padding-block: var(--space-8) var(--space-16);
+}
+
+.page > * {
+  max-width: 56rem;
+}
+
+.head {
+  display: grid;
+  gap: var(--space-3);
+  overflow-wrap: anywhere;
+}
+
+.head__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+h1 {
+  font-size: var(--text-h2);
+}
+
+h2 {
+  margin-bottom: var(--space-3);
+  font-size: var(--text-statement);
+}
+
+.row {
+  display: grid;
+  gap: var(--space-1);
+  padding-block: var(--space-4);
+  border-top: var(--rule);
+}
+
+.row--action {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.row__meta {
+  display: block;
+  color: var(--color-slate);
+  font-size: var(--text-small);
+}
+
+.empty {
+  color: var(--color-slate);
+}
+
+.form {
+  display: grid;
+  gap: var(--space-4);
+  max-width: 40rem;
+}
+
+.note {
+  color: var(--color-slate);
+  font-size: var(--text-small);
+}
+
+.consent {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.consent input {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.2rem;
+  accent-color: var(--color-deep);
+}
+
+.confirmation:focus {
+  outline: none;
+}
+
+.form .btn {
+  justify-self: start;
+}
+
+.choices {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.choices legend {
+  margin-bottom: var(--space-2);
+  padding: 0;
+  font-size: var(--text-small);
+  font-weight: 600;
+}
+
+.choice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--target-min);
+}
+
+.choice input {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: var(--color-deep);
+}
+
+.cv {
+  display: grid;
+  gap: var(--space-3);
+  max-width: 40rem;
+}
+
+.cv__remove {
+  justify-self: start;
+}
+
+.status {
+  min-height: 1.5em;
+  color: var(--color-deep);
+  font-size: var(--text-small);
+}
+
+// Dans un panneau d'espace personnel, le CV prend toute la largeur, comme le profil.
+:host-context(app-panel) .cv {
+  max-width: none;
+}
+
+// Profil : nom et téléphone côte à côte, e-mail en dessous.
+.form--profile {
+  max-width: none;
+}
+
+@media (min-width: 48rem) {
+  .form--profile {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--space-6);
+  }
+
+  .form--profile > * {
+    grid-column: 1 / -1;
+  }
+
+  .form--profile > .form__half {
+    grid-column: auto;
+  }
+}

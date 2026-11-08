@@ -1,0 +1,13 @@
+.share {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.share__feedback {
+  flex-basis: 100%;
+  min-height: 1.5em;
+  color: var(--color-slate);
+  font-size: var(--text-small);
+}

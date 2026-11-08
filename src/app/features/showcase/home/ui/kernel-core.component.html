@@ -1,0 +1,54 @@
+<div class="core">
+  <div
+    class="stack"
+    role="tablist"
+    aria-label="Les quatre métiers, couche par couche"
+    aria-orientation="vertical"
+  >
+    @for (layer of layers; track layer.nav.key; let index = $index) {
+      <button
+        appLayerTab
+        class="layer"
+        type="button"
+        role="tab"
+        [id]="'layer-' + layer.nav.key"
+        [class.layer--on]="selected() === index"
+        [attr.aria-selected]="selected() === index"
+        aria-controls="layer-panel"
+        [tabIndex]="selected() === index ? 0 : -1"
+        (click)="select(index)"
+        (focus)="track(index)"
+        (keydown)="onKeydown($event)"
+      >
+        <span class="layer__index">L{{ index + 1 }}</span>
+        <app-icon class="layer__icon" [data]="layer.nav.icon" [size]="22" />
+        <span class="layer__text">
+          <span class="layer__label">{{ layer.nav.label }}</span>
+          <span class="layer__caption">{{ layer.caption }}</span>
+        </span>
+      </button>
+    }
+  </div>
+
+  <div
+    id="layer-panel"
+    class="panel"
+    role="tabpanel"
+    tabindex="0"
+    [attr.aria-labelledby]="'layer-' + current().nav.key"
+  >
+    <p class="panel__headline statement">{{ current().content.headline }}</p>
+    <ol class="panel__services">
+      @for (service of current().content.services; track service.title; let index = $index) {
+        <li>
+          <span class="panel__index">0{{ index + 1 }}</span>
+          {{ service.title }}
+        </li>
+      }
+    </ol>
+    <a class="text-link panel__more" [routerLink]="['/services', current().nav.slug]">
+      Tout sur {{ current().nav.label }}
+      <app-icon [data]="arrow" [size]="20" />
+    </a>
+  </div>
+</div>

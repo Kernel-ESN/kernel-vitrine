@@ -1,0 +1,116 @@
+.services {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.service {
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-night);
+}
+
+.service__number {
+  color: var(--color-deep);
+  font-family: var(--font-mono);
+  font-size: var(--text-eyebrow);
+  font-weight: 500;
+}
+
+.split {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.split > div:first-child {
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+}
+
+.deliverables li {
+  display: flex;
+  gap: var(--space-4);
+  padding-block: var(--space-4);
+  border-top: var(--rule-night);
+  font-size: var(--text-lead);
+  line-height: 1.4;
+}
+
+.deliverables app-icon {
+  margin-top: 0.15em;
+  color: var(--color-white);
+}
+
+.tools {
+  padding-block: var(--space-12);
+}
+
+.tools__title {
+  margin-bottom: var(--space-4);
+  line-height: 1.4;
+  letter-spacing: 0.14em;
+}
+
+.tools__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.tools__list li {
+  padding: 0.375rem 0.875rem;
+  border: 1px solid var(--color-slate);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 0.9375rem;
+}
+
+.others__title {
+  margin-bottom: var(--space-8);
+}
+
+.others {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.others a {
+  display: grid;
+  gap: var(--space-2);
+  height: 100%;
+  padding: var(--space-6);
+  border: var(--rule);
+  border-radius: var(--radius);
+  color: var(--color-night);
+  text-decoration: none;
+  transition: border-color var(--transition-hover);
+}
+
+@media (hover: hover) {
+  .others a:hover {
+    border-color: var(--color-deep);
+  }
+}
+
+.others app-icon {
+  color: var(--color-deep);
+}
+
+@media (min-width: 48rem) {
+  .services {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .others {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 72rem) {
+  .split {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: var(--space-16);
+  }
+}

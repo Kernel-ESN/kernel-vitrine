@@ -1,0 +1,73 @@
+<footer class="footer on-night">
+  <div class="container footer__grid">
+    <div class="footer__brand">
+      <app-logo variant="night" />
+      <p class="footer__pitch">Société d'ingénierie informatique installée à Niamey.</p>
+      <address class="footer__contact">
+        <span class="footer__row">
+          <app-icon [data]="icons.pin" [size]="20" />
+          {{ site.location }}
+        </span>
+        <a class="footer__row" [href]="site.phoneHref">
+          <app-icon [data]="icons.phone" [size]="20" />
+          {{ site.phoneLabel }}
+        </a>
+      </address>
+      <a class="btn btn--on-night footer__cta" routerLink="/contact">
+        Nous écrire
+        <app-icon [data]="icons.arrow" [size]="20" />
+      </a>
+    </div>
+
+    <nav class="footer__nav" aria-label="Plan du site">
+      <div class="footer__column">
+        <h2 class="footer__title">Services</h2>
+        <ul>
+          @for (item of expertises; track item.key) {
+            <li>
+              <a [routerLink]="['/services', item.slug]">{{ item.label }}</a>
+            </li>
+          }
+        </ul>
+      </div>
+      <div class="footer__column">
+        <h2 class="footer__title">Offres</h2>
+        <ul>
+          @for (item of offers; track item.slug) {
+            <li>
+              <a [routerLink]="['/offres', item.slug]">{{ item.label }}</a>
+            </li>
+          }
+          <li><a class="footer__more" routerLink="/offres">Toutes les offres</a></li>
+        </ul>
+      </div>
+      <div class="footer__column">
+        <h2 class="footer__title">Pour qui</h2>
+        <ul>
+          @for (item of audiences; track item.slug) {
+            <li>
+              <a [routerLink]="['/', item.slug]">{{ item.label }}</a>
+            </li>
+          }
+        </ul>
+      </div>
+      <div class="footer__column">
+        <h2 class="footer__title">La société</h2>
+        <ul>
+          <li><a routerLink="/methode">Méthode</a></li>
+          <li><a routerLink="/a-propos">À propos</a></li>
+          <li><a routerLink="/annonces">Annonces</a></li>
+          <li><a routerLink="/contact">Contact</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+
+  <div class="footer__bar">
+    <div class="container footer__bar-inner">
+      <p>© {{ year }} {{ site.name }}</p>
+      <p class="footer__coordinates">{{ site.coordinates }} · UTC+1</p>
+      <a routerLink="/mentions-legales">Mentions légales</a>
+    </div>
+  </div>
+</footer>

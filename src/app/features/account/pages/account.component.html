@@ -1,0 +1,88 @@
+@if (session.user(); as user) {
+  <app-workspace
+    [eyebrow]="roleLabel()"
+    [heading]="user.name"
+    [subtitle]="user.email"
+    [mark]="user.name"
+    headingTestId="account-user"
+    [sections]="sections"
+    [tocLabel]="text.title"
+  >
+    <ng-container workspaceActions>
+      @if (user.role === 'EMPLOYEUR') {
+        <a class="btn btn--primary" routerLink="/employeur">
+          {{ text.employerSpace }}
+          <app-icon [data]="icons.arrow" [size]="20" />
+        </a>
+      }
+      @if (user.role === 'ADMIN') {
+        <a class="btn btn--primary" routerLink="/moderation">
+          {{ text.moderation }}
+          <app-icon [data]="icons.arrow" [size]="20" />
+        </a>
+      }
+      <a class="action-link" routerLink="/alertes">
+        <app-icon [data]="icons.alerts" [size]="20" />
+        {{ text.alerts }}
+      </a>
+      <button class="action-link" type="button" data-testid="logout" (click)="logout()">
+        <app-icon [data]="icons.logout" [size]="20" />
+        {{ text.logout }}
+      </button>
+    </ng-container>
+
+    <dl class="stats" workspaceAside>
+      <div>
+        <dt>{{ text.savedTitle }}</dt>
+        <dd data-testid="stat-saved">{{ saved().length }}</dd>
+      </div>
+      <div>
+        <dt>{{ text.applicationsTitle }}</dt>
+        <dd data-testid="stat-applications">{{ applications().length }}</dd>
+      </div>
+    </dl>
+
+    <app-panel id="informations" data-spy index="01" [heading]="text.profileTitle" [lead]="text.profileLead">
+      <app-profile-form />
+    </app-panel>
+
+    <app-panel id="cv" data-spy index="02" [heading]="text.cvTitle">
+      <app-saved-cv />
+    </app-panel>
+
+    <app-panel id="candidatures" data-spy index="03" [heading]="text.applicationsTitle">
+      @for (item of applications(); track item.id) {
+        <div class="workspace-row" data-testid="application">
+          <div class="workspace-row__text">
+            <a [routerLink]="link(item.listing)">{{ item.listing.title }}</a>
+            <span class="workspace-row__meta">{{ item.listing.organizationName }}</span>
+          </div>
+          <span class="workspace-row__date">{{ text.sentOn }} {{ day(item.createdAt) }}</span>
+        </div>
+      } @empty {
+        <app-empty-state [icon]="icons.applications" [message]="text.applicationsEmpty">
+          <a class="text-link" routerLink="/emplois">{{ text.browseJobs }}</a>
+        </app-empty-state>
+      }
+    </app-panel>
+
+    <app-panel id="enregistrees" data-spy index="04" [heading]="text.savedTitle">
+      @for (item of saved(); track item.id) {
+        <div class="workspace-row" data-testid="saved">
+          <div class="workspace-row__text">
+            <a [routerLink]="link(item)">{{ item.title }}</a>
+            <span class="workspace-row__meta">{{ item.organizationName }}</span>
+          </div>
+          <button class="action-link action-link--small" type="button" (click)="unsave(item)">
+            <app-icon [data]="icons.remove" [size]="18" />
+            {{ text.remove }}
+          </button>
+        </div>
+      } @empty {
+        <app-empty-state [icon]="icons.saved" [message]="text.savedEmpty">
+          <a class="text-link" routerLink="/annonces">{{ text.browseListings }}</a>
+        </app-empty-state>
+      }
+    </app-panel>
+  </app-workspace>
+}

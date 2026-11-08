@@ -1,0 +1,18 @@
+<section class="band on-night">
+  <div class="container band__inner">
+    <h2>{{ title() }}</h2>
+    <div class="band__side">
+      <p class="band__lead">{{ lead() }}</p>
+      <div class="band__actions">
+        <a class="btn band__primary" routerLink="/contact" [queryParams]="contactParams()">
+          {{ action() }}
+          <app-icon [data]="icons.arrow" [size]="20" />
+        </a>
+        <a class="band__phone" [href]="site.phoneHref">
+          <app-icon [data]="icons.phone" [size]="24" />
+          {{ site.phoneLabel }}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

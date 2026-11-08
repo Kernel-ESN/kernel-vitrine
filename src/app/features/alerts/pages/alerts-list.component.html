@@ -1,0 +1,54 @@
+<app-workspace [eyebrow]="text.listEyebrow" [heading]="text.listTitle" [subtitle]="text.listLead">
+  <ng-container workspaceActions>
+    <a class="btn btn--primary" routerLink="/alertes/nouvelle" data-testid="alert-add">
+      <app-icon [data]="icons.add" [size]="20" />
+      {{ text.add }}
+    </a>
+    <a class="action-link" routerLink="/compte">
+      <app-icon [data]="icons.account" [size]="20" />
+      {{ text.account }}
+    </a>
+  </ng-container>
+
+  @if (justCreated) {
+    <p class="success" role="status" data-testid="alert-created">{{ text.created }}</p>
+  }
+
+  <app-panel index="01" [heading]="text.activeTitle">
+    @if (failed()) {
+      <div class="state" role="alert" data-testid="alerts-error">
+        <h3>{{ text.errorTitle }}</h3>
+      </div>
+    } @else if (alerts().length === 0) {
+      <div data-testid="alerts-empty">
+        <app-empty-state [icon]="icons.add" [message]="text.emptyTitle">
+          <p class="empty-help">{{ text.emptyHelp }}</p>
+          <a class="text-link" routerLink="/annonces">{{ text.browse }}</a>
+        </app-empty-state>
+      </div>
+    } @else {
+      <ul class="alerts" data-testid="alerts-list">
+        @for (alert of alerts(); track alert.id) {
+          <li class="workspace-row">
+            <div class="workspace-row__text">
+              <span class="workspace-row__title">{{ describe(alert.criteria) }}</span>
+              <span class="workspace-row__meta">
+                {{ frequency[alert.frequency] }} · {{ text.sentTo }} {{ alert.email }}
+              </span>
+            </div>
+            <button
+              class="action-link action-link--small"
+              type="button"
+              data-testid="alert-remove"
+              [attr.aria-label]="text.removeLabel(describe(alert.criteria))"
+              (click)="remove(alert.id)"
+            >
+              <app-icon [data]="icons.remove" [size]="18" />
+              {{ text.remove }}
+            </button>
+          </li>
+        }
+      </ul>
+    }
+  </app-panel>
+</app-workspace>

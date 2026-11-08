@@ -1,0 +1,227 @@
+@switch (detail().status) {
+  @case ('missing') {
+    <div class="container page">
+      <div class="state" data-testid="detail-missing">
+        <h1 class="state__title">{{ text.notFoundTitle }}</h1>
+        <a class="btn btn--primary btn--small" [routerLink]="backPath()">{{ text.back }}</a>
+      </div>
+    </div>
+  }
+  @case ('error') {
+    <div class="container page">
+      <div class="state" role="alert" data-testid="detail-error">
+        <h1 class="state__title">{{ text.errorTitle }}</h1>
+        <a class="btn btn--primary btn--small" [routerLink]="backPath()">{{ text.back }}</a>
+      </div>
+    </div>
+  }
+  @default {
+    @if (listing(); as item) {
+      <header class="band">
+        <div class="container band__inner">
+          <nav [attr.aria-label]="text.breadcrumb" data-testid="breadcrumb">
+            <ol class="crumbs">
+              <li>
+                <a routerLink="/annonces">{{ text.home }}</a>
+              </li>
+              <li>
+                <a [routerLink]="backPath()">{{ universeLabel() }}</a>
+              </li>
+              <li aria-current="page">{{ item.title }}</li>
+            </ol>
+          </nav>
+          <div class="top">
+            <app-org-mark
+              size="large"
+              [name]="item.organization.name"
+              [style.view-transition-name]="morph() === item.id ? 'listing-mark' : null"
+            />
+            <div class="top__text">
+              <h1
+                data-testid="detail-title"
+                [style.view-transition-name]="morph() === item.id ? 'listing-title' : null"
+              >
+                {{ item.title }}
+              </h1>
+              <p class="org">
+                <a
+                  [routerLink]="['/organisations', item.organization.slug]"
+                  data-testid="detail-organization"
+                  >{{ item.organization.name }}</a
+                >
+                @if (item.organization.verified) {
+                  <span class="badge badge--verified" data-testid="verified">
+                    <app-icon [data]="icons.verified" [size]="18" />
+                    {{ text.verified }}
+                  </span>
+                }
+              </p>
+              <ul class="top__facts">
+                <li class="top__type">{{ type() }}</li>
+                <li><app-icon [data]="icons.pin" [size]="18" />{{ item.city }}</li>
+                <li>{{ published() }}</li>
+                <li><app-deadline-badge [deadline]="item.deadline" /></li>
+              </ul>
+            </div>
+          </div>
+          <div class="top__actions">
+            <app-save-listing [listing]="item" />
+            <app-share-actions [title]="item.title" />
+          </div>
+        </div>
+      </header>
+
+      <div class="container page">
+        @if (expired()) {
+          <div class="state expired" data-testid="expired-notice">
+            <h2>{{ text.expiredTitle }}</h2>
+            <p>{{ text.expiredHelp }}</p>
+          </div>
+        }
+
+        <div class="layout">
+          <div class="main">
+            <section aria-labelledby="about-title">
+              <h2 id="about-title">{{ text.about }}</h2>
+              @for (paragraph of item.description; track paragraph) {
+                <p>{{ paragraph }}</p>
+              }
+            </section>
+
+            @if (item.attachments.length) {
+              <section aria-labelledby="documents-title">
+                <h2 id="documents-title">{{ text.documents }}</h2>
+                <ul class="documents">
+                  @for (file of item.attachments; track file.url) {
+                    <li>
+                      <a [href]="file.url" download data-testid="attachment">
+                        <app-icon [data]="icons.download" [size]="20" />
+                        <span>{{ file.name }}</span>
+                        <small>{{ size(file.sizeBytes) }}</small>
+                      </a>
+                    </li>
+                  }
+                </ul>
+              </section>
+            }
+
+            <section class="organization" aria-labelledby="organization-title">
+              <h2 id="organization-title">{{ text.aboutOrganization }}</h2>
+              <div class="organization__card">
+                <app-org-mark [name]="item.organization.name" />
+                <div>
+                  <p class="organization__name">{{ item.organization.name }}</p>
+                  <a [routerLink]="['/organisations', item.organization.slug]">{{
+                    text.organizationPage
+                  }}</a>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <aside class="side">
+            @if (!expired()) {
+              <section
+                id="postuler"
+                class="apply"
+                aria-labelledby="apply-title"
+                data-testid="apply-box"
+              >
+                <h2 id="apply-title">{{ applyTitle() }}</h2>
+                <p>{{ item.howToApply.instructions }}</p>
+                @switch (item.howToApply.mode) {
+                  @case ('EN_LIGNE') {
+                    <a
+                      class="btn btn--primary btn--block"
+                      routerLink="postuler"
+                      data-testid="apply-online"
+                    >
+                      {{ text.applyOnline }}
+                      <app-icon [data]="icons.apply" [size]="20" />
+                    </a>
+                  }
+                  @case ('EMAIL') {
+                    <a
+                      class="btn btn--primary btn--block"
+                      data-testid="apply-email"
+                      [href]="'mailto:' + item.howToApply.email"
+                    >
+                      <app-icon [data]="icons.mail" [size]="20" />
+                      {{ text.applyEmail }} {{ item.howToApply.email }}
+                    </a>
+                  }
+                  @case ('LIEN') {
+                    <a
+                      class="btn btn--primary btn--block"
+                      target="_blank"
+                      rel="noopener"
+                      data-testid="apply-link"
+                      [href]="item.howToApply.url"
+                    >
+                      {{ text.applyLink }}
+                      <app-icon [data]="icons.link" [size]="20" />
+                    </a>
+                  }
+                }
+              </section>
+            }
+
+            <dl class="facts" data-testid="facts">
+              @for (fact of facts(); track fact[0]) {
+                <div>
+                  <dt>{{ fact[0] }}</dt>
+                  <dd>{{ fact[1] }}</dd>
+                </div>
+              }
+            </dl>
+
+            <a
+              class="alert-link"
+              routerLink="/alertes/nouvelle"
+              data-testid="detail-alert"
+              [queryParams]="alertParams()"
+            >
+              <app-icon [data]="icons.alert" [size]="20" />
+              {{ text.alert }}
+            </a>
+          </aside>
+        </div>
+
+        @if (fromOrganization().length) {
+          <section
+            class="similar"
+            aria-labelledby="organization-listings-title"
+            data-testid="from-organization"
+          >
+            <h2 id="organization-listings-title">{{ text.fromOrganization }}</h2>
+            @for (other of fromOrganization(); track other.id) {
+              <app-listing-card [listing]="other" />
+            }
+          </section>
+        }
+
+        @if (similar().length) {
+          <section class="similar" aria-labelledby="similar-title">
+            <h2 id="similar-title">{{ text.similar }}</h2>
+            @for (other of similar(); track other.id) {
+              <app-listing-card [listing]="other" />
+            }
+          </section>
+        }
+      </div>
+
+      @if (!expired()) {
+        <div class="apply-bar">
+          <a
+            class="btn btn--primary btn--block"
+            [routerLink]="[]"
+            fragment="postuler"
+            data-testid="apply-jump"
+          >
+            {{ applyTitle() }}
+          </a>
+        </div>
+      }
+    }
+  }
+}

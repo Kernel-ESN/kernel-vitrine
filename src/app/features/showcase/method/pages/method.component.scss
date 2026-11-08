@@ -1,0 +1,100 @@
+.timeline {
+  position: relative;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 1.25rem;
+  width: 2px;
+  background: var(--color-frost);
+}
+
+.timeline::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 1.25rem;
+  width: 2px;
+  background: var(--color-kernel);
+  transform-origin: top;
+}
+
+// Le trait se remplit au défilement dans les navigateurs compatibles, sinon il reste plein.
+@supports (animation-timeline: view()) {
+  .timeline::after {
+    animation: fill linear both;
+    animation-timeline: view();
+    animation-range: entry 20% cover 70%;
+  }
+}
+
+.step {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  gap: var(--space-6);
+  padding-block: var(--space-8);
+}
+
+.step__number {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius);
+  background: var(--color-night);
+  color: var(--color-white);
+  font-family: var(--font-mono);
+  font-size: var(--text-eyebrow);
+  font-weight: 500;
+}
+
+.step__body {
+  display: grid;
+  gap: var(--space-4);
+  max-width: 50rem;
+}
+
+@media (min-width: 72rem) {
+  .step__body {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    column-gap: var(--space-16);
+    max-width: none;
+  }
+
+  .step__body h2 {
+    grid-row: span 2;
+  }
+}
+
+.split {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.split > div:first-child {
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+}
+
+@keyframes fill {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@media (min-width: 72rem) {
+  .split {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: var(--space-16);
+  }
+}

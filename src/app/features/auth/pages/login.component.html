@@ -1,0 +1,37 @@
+<div class="container page">
+  <h1>{{ text.loginTitle }}</h1>
+
+  <form class="form" novalidate appFocusInvalid [formGroup]="form" (ngSubmit)="submit()">
+    <app-field controlId="login-email" [label]="text.email" [error]="text.emailError">
+      <input appControl type="email" autocomplete="email" formControlName="email" />
+    </app-field>
+    <app-field controlId="login-password" [label]="text.password" [error]="text.passwordError">
+      <input
+        appControl
+        type="password"
+        autocomplete="current-password"
+        formControlName="password"
+      />
+    </app-field>
+    @if (error(); as problem) {
+      <p class="form-field__error" role="alert" data-testid="login-error">
+        {{ problem === 'INVALID_CREDENTIALS' ? text.invalid : text.unavailable }}
+      </p>
+    }
+    <button class="btn btn--primary btn--block" type="submit" data-testid="login-submit">
+      {{ text.login }}
+    </button>
+  </form>
+
+  <a routerLink="/inscription" [queryParams]="retour ? { retour } : {}">{{ text.toRegister }}</a>
+
+  @if (samples.length) {
+    <div class="samples">
+      <strong>{{ text.samples }}</strong>
+      @for (account of samples; track account.id) {
+        <span>{{ account.email }}<br /></span>
+      }
+      {{ text.sampleHelp }}
+    </div>
+  }
+</div>
